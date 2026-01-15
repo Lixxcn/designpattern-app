@@ -98,6 +98,73 @@ classDiagram
 """
         );
         patterns.add(factoryMethod);
+
+        // 初始化抽象工厂模式数据
+        Pattern abstractFactory = new Pattern(
+            "abstract-factory",
+            "抽象工厂模式",
+            "Abstract Factory Pattern",
+            PatternCategory.CREATIONAL,
+            PatternDifficulty.INTERMEDIATE,
+            "提供一个接口，用于创建相关或依赖对象的家族，而不需要明确指定具体类。",
+            "提供一个接口，用于创建相关或依赖对象的家族，而不需要明确指定具体类。",
+            "1. 当系统要独立于它的产品的创建、组合和表示时\n2. 当系统要由多个产品系列中的一个来配置时\n3. 当要强调一系列相关的产品对象的设计以便进行联合使用时\n4. 当提供一个产品类库，而只想显示它们的接口而不是实现时",
+            "AbstractFactory（抽象工厂）- 声明创建抽象产品对象的操作\nConcreteFactory（具体工厂）- 实现创建具体产品对象的操作\nAbstractProduct（抽象产品）- 声明一类产品的对象接口\nProduct（具体产品）- 定义AbstractProduct接口，由ConcreteFactory创建",
+            "客户端只使用AbstractFactory和AbstractProduct类声明的接口，ConcreteFactory在运行时创建具体产品对象。",
+            "优点：\n1. 分离接口和实现\n2. 产品族内保证一致性\n3. 利于产品族切换\n\n缺点：\n1. 难以支持新种类产品\n2. 类层级复杂",
+            "相关模式：\n- 抽象工厂模式通常用工厂方法模式实现\n- 具体工厂通常是单例模式\n- 产品可以是原型模式",
+            "Spring的BeanFactory和ApplicationContext使用抽象工厂模式创建Bean。",
+            "1. DocumentBuilderFactory - 创建XML解析器\n2. TransformerFactory - 创建XSLT处理器\n3. SAXParserFactory - 创建SAX解析器",
+            "1. 跨平台UI组件库（Windows/Mac/Linux组件族）\n2. 不同数据库的连接器族\n3. 不同主题的UI组件族",
+            """
+classDiagram
+    class AbstractFactory {
+        <<interface>>
+        +createProductA()
+        +createProductB()
+    }
+    class ConcreteFactory1 {
+        +createProductA()
+        +createProductB()
+    }
+    class ConcreteFactory2 {
+        +createProductA()
+        +createProductB()
+    }
+    class AbstractProductA {
+        <<interface>>
+        +operationA()
+    }
+    class AbstractProductB {
+        <<interface>>
+        +operationB()
+    }
+    class ProductA1 {
+        +operationA()
+    }
+    class ProductA2 {
+        +operationA()
+    }
+    class ProductB1 {
+        +operationB()
+    }
+    class ProductB2 {
+        +operationB()
+    }
+
+    AbstractFactory <|.. ConcreteFactory1
+    AbstractFactory <|.. ConcreteFactory2
+    AbstractProductA <|.. ProductA1
+    AbstractProductA <|.. ProductA2
+    AbstractProductB <|.. ProductB1
+    AbstractProductB <|.. ProductB2
+    ConcreteFactory1 ..> ProductA1 : creates
+    ConcreteFactory1 ..> ProductB1 : creates
+    ConcreteFactory2 ..> ProductA2 : creates
+    ConcreteFactory2 ..> ProductB2 : creates
+"""
+        );
+        patterns.add(abstractFactory);
     }
 
     public List<Pattern> findAll() {
