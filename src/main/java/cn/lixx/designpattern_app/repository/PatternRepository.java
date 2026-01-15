@@ -165,6 +165,112 @@ classDiagram
 """
         );
         patterns.add(abstractFactory);
+
+        // 初始化建造者模式数据
+        Pattern builder = new Pattern(
+            "builder",
+            "建造者模式",
+            "Builder Pattern",
+            PatternCategory.CREATIONAL,
+            PatternDifficulty.INTERMEDIATE,
+            "将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。",
+            "将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。",
+            "1. 当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时\n2. 当构造过程必须允许被构造的对象有不同的表示时",
+            "Builder（建造者）- 为创建产品对象的各个部件指定抽象接口\nConcreteBuilder（具体建造者）- 实现Builder接口以构造和装配各个部件\nDirector（指挥者）- 构建一个使用Builder接口的对象\nProduct（产品）- 被构造的复杂对象",
+            "Director创建ConcreteBuilder对象，调用Builder的构建方法，最后返回Product。",
+            "优点：\n1. 分步创建对象，流程清晰\n2. 可以控制对象创建细节\n3. 相同构建流程可创建不同表示\n\n缺点：\n1. 产品必须有共同点\n2. 产品内部结构复杂会增加Builder类",
+            "相关模式：\n- 抽象工厂模式与建造者模式相似\n- 组合模式通常用建造者模式构建",
+            "Spring的StringBuilder、UriComponentsBuilder使用建造者模式。",
+            "1. StringBuilder - 构建字符串\n2. DocumentBuilder - 构建XML文档\n3. Locale.Builder - 构建Locale对象",
+            "1. SQL查询构建器\n2. HTTP请求构建器\n3. 配置对象构建器",
+            """
+classDiagram
+    class Product {
+        -String cpu
+        -String ram
+        -String storage
+        +Product()
+        +getCpu() String
+        +getRam() String
+        +getStorage() String
+    }
+    class Product$Builder {
+        -String cpu
+        -String ram
+        -String storage
+        +cpu(String) Builder
+        +ram(String) Builder
+        +storage(String) Builder
+        +build() Product
+    }
+    class Director {
+        -Builder builder
+        +buildHighPerformance() Product
+        +buildOffice() Product
+        +buildGaming() Product
+    }
+    class Client {
+        +main()
+    }
+
+    Product --> Product$Builder : creates
+    Director --> Product$Builder : uses
+    Client --> Product$Builder : uses
+    Client --> Director : uses
+    Product$Builder ..> Product : builds
+"""
+        );
+        patterns.add(builder);
+
+        // 初始化原型模式数据
+        Pattern prototype = new Pattern(
+            "prototype",
+            "原型模式",
+            "Prototype Pattern",
+            PatternCategory.CREATIONAL,
+            PatternDifficulty.BEGINNER,
+            "用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。",
+            "用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。",
+            "1. 当一个系统应该独立于它的产品创建、构成和表示时\n2. 当要实例化的类是在运行时刻指定时\n3. 为了避免创建一个与产品类层次平行的工厂类层次时\n4. 当一个类的实例只能有几个不同状态组合中的一种时",
+            "Prototype（原型）- 声明克隆自己的接口\nConcretePrototype（具体原型）- 实现克隆方法\nClient（客户端）- 通过原型克隆创建新对象",
+            "Client通过调用Prototype的clone()方法创建新对象，无需知道具体创建细节。",
+            "优点：\n1. 性能优良，直接拷贝内存\n2. 逃避构造函数约束\n3. 简化对象创建\n\n缺点：\n1. 配合克隆方法需要注意\n2. 深拷贝与浅拷贝问题",
+            "相关模式：\n- 抽象工厂模式可以用原型模式存储和克隆产品\n- 组合模式可以用原型模式克隆复杂结构",
+            "Spring的Bean作用域prototype（原型）每次获取都创建新实例。",
+            "1. Object.clone() - 克隆对象\n2. Cloneable接口 - 标记可克隆\n3. ArrayList.clone() - 克隆列表",
+            "1. 文档模板克隆\n2. 图形对象复制\n3. 数据库记录克隆",
+            """
+classDiagram
+    class Prototype {
+        <<interface>>
+        +clone() Prototype
+    }
+    class ConcretePrototype {
+        -String title
+        -String content
+        -String author
+        +clone() Prototype
+        +getTitle() String
+        +setTitle(String)
+        +getContent() String
+        +setContent(String)
+    }
+    class PrototypeManager {
+        -Map~String,Prototype~ prototypes
+        +registerPrototype(String, Prototype)
+        +create(String) Prototype
+    }
+    class Client {
+        +main()
+    }
+
+    Prototype <|.. ConcretePrototype
+    Client --> Prototype : uses
+    Client --> PrototypeManager : uses
+    ConcretePrototype ..> ConcretePrototype : clones
+"""
+        );
+        patterns.add(prototype);
     }
 
     public List<Pattern> findAll() {
