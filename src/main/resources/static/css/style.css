@@ -147,33 +147,45 @@ aside {
 }
 
 .detail {
-    max-width: 1000px;
+    display: flex;
+    max-width: 1200px;
     margin: 0 auto;
+    gap: 2rem;
+    padding: 2rem;
 }
 
 .tabs {
     display: flex;
-    border-bottom: 2px solid #e0e0e0;
-    margin-bottom: 2rem;
+    flex-direction: column;
+    flex: 0 0 180px;
+    gap: 0.5rem;
 }
 
 .tab {
-    padding: 1rem 2rem;
-    background: none;
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-left: 3px solid transparent;
     cursor: pointer;
     font-size: 1rem;
-    margin-bottom: -2px;
+    text-align: left;
+    border-radius: 0 4px 4px 0;
+    transition: background 0.2s;
+}
+
+.tab:hover {
+    background: #e9ecef;
 }
 
 .tab.active {
-    border-bottom-color: #3498db;
-    color: #3498db;
+    background: #3498db;
+    color: white;
+    border-left-color: #2980b9;
 }
 
 .tab-content {
     display: none;
+    flex: 1;
 }
 
 .tab-content.active {
