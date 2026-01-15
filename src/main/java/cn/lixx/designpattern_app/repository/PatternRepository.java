@@ -603,6 +603,414 @@ classDiagram
 """
         );
         patterns.add(template);
+
+        // 初始化桥接模式数据
+        Pattern bridge = new Pattern(
+            "bridge",
+            "桥接模式",
+            "Bridge Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.INTERMEDIATE,
+            "将抽象部分与实现部分分离，使它们都可以独立地变化。",
+            "将抽象部分与实现部分分离，使它们都可以独立地变化。",
+            "1. 当不希望在抽象和实现之间有固定的绑定关系时\n2. 当类的抽象和实现可以通过生成子类来加以扩充时",
+            "Abstraction（抽象化）- 定义抽象类接口\nImplementor（实现化）- 定义实现类接口\nConcreteImplementor（具体实现化）- 实现Implementor",
+            "Abstraction包含Implementor引用，具体操作委托给Implementor。",
+            "优点：分离接口和实现\n缺点：增加系统复杂性",
+            "相关模式：桥接模式与适配器模式相似",
+            "Spring的DataSource使用桥接模式。",
+            "1. java.sql.Driver - 数据库驱动\n2. java.util.logging.Handler",
+            "1. 不同数据库驱动\n2. 不同支付方式",
+            """
+classDiagram
+    class Color {
+        <<interface>>
+        +apply() String
+    }
+    class Shape {
+        <<abstract>>
+        #Color color
+        +Shape(Color)
+        +draw() void
+    }
+    class Circle {
+        +Circle(Color)
+        +draw() void
+    }
+    Client --> Shape : uses
+    Shape o-- Color : uses
+"""
+        );
+        patterns.add(bridge);
+
+        // 初始化组合模式数据
+        Pattern composite = new Pattern(
+            "composite",
+            "组合模式",
+            "Composite Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.INTERMEDIATE,
+            "将对象组合成树形结构以表示'部分-整体'的层次结构。",
+            "将对象组合成树形结构以表示'部分-整体'的层次结构。",
+            "1. 表示对象的部分-整体层次结构时\n2. 使用者忽略组合对象与单个对象的不同时",
+            "Component（组件）- 声明组合接口\nLeaf（叶子）- 定义组件行为\nComposite（组合）- 存储子组件",
+            "Leaf实现Component，Composite存储Component子对象。",
+            "优点：简化客户端代码\n缺点：设计复杂",
+            "相关模式：组合模式与装饰器模式相似",
+            "Spring的HttpServletRequest使用组合模式。",
+            "1. java.awt.Container - 容器组件\n2. javax.swing.JComponent",
+            "1. 文件系统\n2. UI组件树",
+            """
+classDiagram
+    class Component {
+        <<interface>>
+        +operation() void
+    }
+    class Leaf {
+        +operation() void
+    }
+    class Composite {
+        -List~Component~ children
+        +operation() void
+    }
+    Component <|.. Leaf
+    Component <|.. Composite
+    Composite o-- Component : contains
+"""
+        );
+        patterns.add(composite);
+
+        // 初始化外观模式数据
+        Pattern facade = new Pattern(
+            "facade",
+            "外观模式",
+            "Facade Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.BEGINNER,
+            "为子系统中的一组接口提供一个一致的界面。",
+            "为子系统中的一组接口提供一个一致的界面。",
+            "1. 当需要为复杂的子系统提供简单接口时\n2. 客户程序与抽象类存在很大依赖时",
+            "Facade（外观）- 知道哪些子系统负责处理请求\nSubsystem（子系统）- 实现子系统功能",
+            "Facade调用子系统，客户端只与Facade交互。",
+            "优点：降低耦合度、简化接口\n缺点：不符合开闭原则",
+            "相关模式：外观模式与中介者模式相似",
+            "Spring的JdbcTemplate使用外观模式。",
+            "1. java.net.URL - 统一资源定位\n2. javax.faces.context.FacesContext",
+            "1. 库存管理系统\n2. API网关",
+            """
+classDiagram
+    class CPU { +start() void }
+    class Memory { +load() void }
+    class HardDrive { +read() void }
+    class ComputerFacade {
+        -CPU cpu
+        -Memory memory
+        -HardDrive hardDrive
+        +startComputer() void
+    }
+    ComputerFacade --> CPU : uses
+    ComputerFacade --> Memory : uses
+    ComputerFacade --> HardDrive : uses
+"""
+        );
+        patterns.add(facade);
+
+        // 初始化享元模式数据
+        Pattern flyweight = new Pattern(
+            "flyweight",
+            "享元模式",
+            "Flyweight Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.ADVANCED,
+            "运用共享技术有效地支持大量细粒度的对象。",
+            "运用共享技术有效地支持大量细粒度的对象。",
+            "1. 应用程序使用了大量对象时\n2. 对象的大部分状态可以外部环境时",
+            "Flyweight（享元）- 定义接口\nConcreteFlyweight（具体享元）- 实现接口\nFlyweightFactory（享元工厂）- 管理享元",
+            "FlyweightFactory创建和管理Flyweight。",
+            "优点：减少对象数量、节省内存\n缺点：增加运行时间",
+            "相关模式：享元模式与组合模式可以结合使用",
+            "Spring的Bean作用域singleton使用享元模式思想。",
+            "1. String.intern() - 字符串常量池\n2. Integer.valueOf() - 缓存",
+            "1. 文本编辑器字符\n2. 游戏对象池",
+            """
+classDiagram
+    class Flyweight {
+        <<interface>>
+        +operation(String) void
+    }
+    class ConcreteFlyweight {
+        -String intrinsicState
+        +operation(String) void
+    }
+    class FlyweightFactory {
+        -Map~String,Flyweight~ flyweights
+        +getFlyweight(String) Flyweight
+    }
+    Flyweight <|.. ConcreteFlyweight
+    FlyweightFactory --> Flyweight : manages
+"""
+        );
+        patterns.add(flyweight);
+
+        // 初始化命令模式数据
+        Pattern command = new Pattern(
+            "command",
+            "命令模式",
+            "Command Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.INTERMEDIATE,
+            "将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化。",
+            "将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化。",
+            "1. 需要抽象出待执行的动作时\n2. 需要在不同时刻指定、排列和执行请求时\n3. 需要支持取消操作时",
+            "Command（命令）- 声明执行接口\nConcreteCommand（具体命令）- 实现命令\nReceiver（接收者）- 执行操作",
+            "Invoker调用Command，Command操作Receiver。",
+            "优点：降低耦合度、易于扩展、支持撤销\n缺点：类数量增多",
+            "相关模式：命令模式与组合模式可以结合使用",
+            "Spring的CommandRunner使用命令模式。",
+            "1. java.lang.Runnable - 命令接口\n2. javax.swing.Action",
+            "1. GUI按钮操作\n2. 任务调度",
+            """
+classDiagram
+    class Command {
+        <<interface>>
+        +execute() void
+        +undo() void
+    }
+    class LightOnCommand {
+        -Light light
+        +execute() void
+        +undo() void
+    }
+    class Light {
+        +on() void
+        +off() void
+    }
+    Command <|.. LightOnCommand
+    LightOnCommand --> Light : operates on
+"""
+        );
+        patterns.add(command);
+
+        // 初始化迭代器模式数据
+        Pattern iterator = new Pattern(
+            "iterator",
+            "迭代器模式",
+            "Iterator Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.BEGINNER,
+            "提供一种方法顺序访问一个聚合对象中各个元素。",
+            "提供一种方法顺序访问一个聚合对象中各个元素。",
+            "1. 需要访问聚合对象内容而不暴露内部表示时\n2. 需要为聚合对象提供多种遍历方式时",
+            "Iterator（迭代器）- 定义访问接口\nAggregate（聚合）- 定义创建迭代器接口",
+            "Aggregate创建Iterator，Iterator遍历Aggregate。",
+            "优点：符合单一职责、简化聚合接口\n缺点：增加类数量",
+            "相关模式：迭代器模式与组合模式一起使用",
+            "Spring的Iterator、Stream使用迭代器模式。",
+            "1. java.util.Iterator - 迭代器接口\n2. java.util.Collection",
+            "1. 集合遍历\n2. 树形结构遍历",
+            """
+classDiagram
+    class Iterator {
+        <<interface>>
+        +hasNext() boolean
+        +next() Object
+    }
+    class Aggregate {
+        <<interface>>
+        +createIterator() Iterator
+    }
+    Iterator <|.. NameIterator
+    Aggregate <|.. NameCollection
+    NameCollection --> NameIterator : creates
+"""
+        );
+        patterns.add(iterator);
+
+        // 初始化中介者模式数据
+        Pattern mediator = new Pattern(
+            "mediator",
+            "中介者模式",
+            "Mediator Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.INTERMEDIATE,
+            "用一个中介对象来封装一系列的对象交互。",
+            "用一个中介对象来封装一系列的对象交互。",
+            "1. 一组对象以定义良好但是复杂的方式进行通信时\n2. 对象难以引用其他对象时",
+            "Mediator（中介者）- 定义交互接口\nColleague（同事）- 持有Mediator引用",
+            "Colleague通过Mediator交互。",
+            "优点：降低耦合度、集中控制交互\n缺点：中介者变得复杂",
+            "相关模式：中介者模式与观察者模式相似",
+            "Spring的ApplicationContext使用中介者模式。",
+            "1. java.util.Timer - 定时器调度",
+            "1. 聊天室\n2. 航空管制系统",
+            """
+classDiagram
+    class Mediator {
+        <<interface>>
+        +sendMessage(String, Colleague)
+    }
+    class Colleague {
+        <<abstract>>
+        #Mediator mediator
+        +receive(String)
+        +send(String)
+    }
+    Mediator <|.. ConcreteMediator
+    Colleague <|-- ConcreteColleague1
+    Colleague o-- Mediator : uses
+"""
+        );
+        patterns.add(mediator);
+
+        // 初始化备忘录模式数据
+        Pattern memento = new Pattern(
+            "memento",
+            "备忘录模式",
+            "Memento Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.INTERMEDIATE,
+            "在不破坏封装性的前提下，捕获一个对象的内部状态。",
+            "在不破坏封装性的前提下，捕获一个对象的内部状态。",
+            "1. 需要保存对象的状态时\n2. 不能通过接口暴露内部状态时",
+            "Memento（备忘录）- 存储状态\nOriginator（发起者）- 创建和恢复备忘录",
+            "Originator创建Memento，Caretaker管理Memento。",
+            "优点：保持封装、简化Originator\n缺点：消耗资源",
+            "相关模式：备忘录模式与命令模式可以结合使用",
+            "Spring的@SessionAttribute使用备忘录模式。",
+            "1. java.io.Serializable - 序列化接口",
+            "1. 文本编辑器撤销\n2. 游戏存档",
+            """
+classDiagram
+    class Memento {
+        -String state
+        +getState() String
+    }
+    class Originator {
+        -String state
+        +save() Memento
+        +restore(Memento)
+    }
+    Originator ..> Memento : creates
+    Originator ..> Memento : restores
+"""
+        );
+        patterns.add(memento);
+
+        // 初始化状态模式数据
+        Pattern state = new Pattern(
+            "state",
+            "状态模式",
+            "State Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.INTERMEDIATE,
+            "允许一个对象在其内部状态改变时改变它的行为。",
+            "允许一个对象在其内部状态改变时改变它的行为。",
+            "1. 对象的行为取决于它的状态时\n2. 需要在运行时根据状态改变行为时",
+            "State（状态）- 定义接口\nConcreteState（具体状态）- 实现状态行为\nContext（上下文）- 持有状态",
+            "Context持有State，根据情况切换ConcreteState。",
+            "优点：符合开闭原则、避免条件语句\n缺点：类数量增加",
+            "相关模式：状态模式与策略模式相似",
+            "Spring的StateMachine使用状态模式。",
+            "1. java.lang.Thread.State - 线程状态",
+            "1. 订单状态流转\n2. 游戏角色状态",
+            """
+classDiagram
+    class State {
+        <<interface>>
+        +insertCoin() void
+        +ejectCoin() void
+    }
+    class NoCoinState {
+        +insertCoin() void
+        +ejectCoin() void
+    }
+    class VendingMachine {
+        -State currentState
+        +setState(State)
+        +insertCoin() void
+    }
+    State <|.. NoCoinState
+    VendingMachine o-- State : uses
+"""
+        );
+        patterns.add(state);
+
+        // 初始化访问者模式数据
+        Pattern visitor = new Pattern(
+            "visitor",
+            "访问者模式",
+            "Visitor Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.ADVANCED,
+            "表示一个作用于某对象结构中的各元素的操作。",
+            "表示一个作用于某对象结构中的各元素的操作。",
+            "1. 对象结构包含很多类对象时\n2. 需要对对象进行不同且不相关的操作时",
+            "Visitor（访问者）- 声明操作接口\nElement（元素）- 定义accept方法",
+            "Element.accept(Visitor)，Visitor.visit(Element)。",
+            "优点：符合单一职责、易于扩展\n缺点：增加难度、元素难扩展",
+            "相关模式：访问者模式与迭代器模式可以结合使用",
+            "Spring的BeanDefinitionVisitor使用访问者模式。",
+            "1. javax.lang.model.element.ElementVisitor",
+            "1. 编译器语法树\n2. 文档结构处理",
+            """
+classDiagram
+    class Visitor {
+        <<interface>>
+        +visit(Book)
+    }
+    class ItemElement {
+        <<interface>>
+        +accept(Visitor)
+    }
+    Visitor <|.. ShoppingCartVisitor
+    ItemElement <|.. Book
+    Book --> Visitor : accepts
+"""
+        );
+        patterns.add(visitor);
+
+        // 初始化解释器模式数据
+        Pattern interpreter = new Pattern(
+            "interpreter",
+            "解释器模式",
+            "Interpreter Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.ADVANCED,
+            "给定一个语言，定义它的文法的一种表示。",
+            "给定一个语言，定义它的文法的一种表示。",
+            "1. 语言的文法比较简单时\n2. 效率不是关键问题时",
+            "Expression（表达式）- 声明解释接口\nTerminalExpression（终结符）- 实现解释\nContext（上下文）- 包含全局信息",
+            "Context解析表达式，Expression递归解释。",
+            "优点：易于实现、易于扩展\n缺点：效率较低、类数量多",
+            "相关模式：解释器模式与组合模式相似",
+            "Spring的SpEL使用解释器模式。",
+            "1. java.text.SimpleDateFormat - 日期格式\n2. java.util.regex.Pattern",
+            "1. SQL解析器\n2. 正则表达式",
+            """
+classDiagram
+    class Expression {
+        <<interface>>
+        +interpret() int
+    }
+    class NumberExpression {
+        -int number
+        +interpret() int
+    }
+    class AddExpression {
+        -Expression left
+        -Expression right
+        +interpret() int
+    }
+    class Context {
+        -Expression expression
+        +parse(String)
+    }
+    Expression <|.. NumberExpression
+    Expression <|.. AddExpression
+    Context o-- Expression : interprets
+"""
+        );
+        patterns.add(interpreter);
     }
 
     public List<Pattern> findAll() {

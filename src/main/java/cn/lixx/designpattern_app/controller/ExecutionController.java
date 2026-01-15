@@ -23,6 +23,17 @@ public class ExecutionController {
     private final StrategyService strategyService;
     private final ChainService chainService;
     private final TemplateService templateService;
+    private final BridgeService bridgeService;
+    private final CompositeService compositeService;
+    private final FacadeService facadeService;
+    private final FlyweightService flyweightService;
+    private final CommandService commandService;
+    private final IteratorService iteratorService;
+    private final MediatorService mediatorService;
+    private final MementoService mementoService;
+    private final StateService stateService;
+    private final VisitorService visitorService;
+    private final InterpreterService interpreterService;
 
     public ExecutionController(
             SingletonService singletonService,
@@ -36,7 +47,18 @@ public class ExecutionController {
             ObserverService observerService,
             StrategyService strategyService,
             ChainService chainService,
-            TemplateService templateService) {
+            TemplateService templateService,
+            BridgeService bridgeService,
+            CompositeService compositeService,
+            FacadeService facadeService,
+            FlyweightService flyweightService,
+            CommandService commandService,
+            IteratorService iteratorService,
+            MediatorService mediatorService,
+            MementoService mementoService,
+            StateService stateService,
+            VisitorService visitorService,
+            InterpreterService interpreterService) {
         this.singletonService = singletonService;
         this.factoryMethodService = factoryMethodService;
         this.abstractFactoryService = abstractFactoryService;
@@ -49,6 +71,17 @@ public class ExecutionController {
         this.strategyService = strategyService;
         this.chainService = chainService;
         this.templateService = templateService;
+        this.bridgeService = bridgeService;
+        this.compositeService = compositeService;
+        this.facadeService = facadeService;
+        this.flyweightService = flyweightService;
+        this.commandService = commandService;
+        this.iteratorService = iteratorService;
+        this.mediatorService = mediatorService;
+        this.mementoService = mementoService;
+        this.stateService = stateService;
+        this.visitorService = visitorService;
+        this.interpreterService = interpreterService;
     }
 
     @GetMapping("/{patternId}")
@@ -62,13 +95,24 @@ public class ExecutionController {
             case "prototype" -> prototypeService.executeExample();
             // 结构型模式
             case "adapter" -> adapterService.executeExample();
+            case "bridge" -> bridgeService.executeExample();
+            case "composite" -> compositeService.executeExample();
             case "decorator" -> decoratorService.executeExample();
+            case "facade" -> facadeService.executeExample();
+            case "flyweight" -> flyweightService.executeExample();
             case "proxy" -> proxyService.executeExample();
             // 行为型模式
-            case "observer" -> observerService.executeExample();
-            case "strategy" -> strategyService.executeExample();
             case "chain" -> chainService.executeExample();
+            case "command" -> commandService.executeExample();
+            case "interpreter" -> interpreterService.executeExample();
+            case "iterator" -> iteratorService.executeExample();
+            case "mediator" -> mediatorService.executeExample();
+            case "memento" -> mementoService.executeExample();
+            case "observer" -> observerService.executeExample();
+            case "state" -> stateService.executeExample();
+            case "strategy" -> strategyService.executeExample();
             case "template" -> templateService.executeExample();
+            case "visitor" -> visitorService.executeExample();
             default -> "未找到模式: " + patternId;
         };
         return Map.of("output", output);
