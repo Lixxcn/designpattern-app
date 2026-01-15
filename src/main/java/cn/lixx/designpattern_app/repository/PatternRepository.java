@@ -47,6 +47,57 @@ classDiagram
 """
         );
         patterns.add(singleton);
+
+        // 初始化工厂方法模式数据
+        Pattern factoryMethod = new Pattern(
+            "factory-method",
+            "工厂方法模式",
+            "Factory Method Pattern",
+            PatternCategory.CREATIONAL,
+            PatternDifficulty.BEGINNER,
+            "定义一个用于创建对象的接口，让子类决定实例化哪一个类。",
+            "定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。",
+            "1. 当一个类不知道它所必须创建的对象的类时\n2. 当类希望由它的子类来指定它所创建的对象时\n3. 当类将创建对象的职责委托给多个帮助子类中的某一个时",
+            "Product（产品）- 定义产品接口\nConcreteProduct（具体产品）- 实现Product接口\nFactory（工厂）- 声明工厂方法\nConcreteFactory（具体工厂）- 实现工厂方法创建具体产品",
+            "客户端通过ConcreteFactory创建ConcreteProduct，Factory定义创建接口，ConcreteFactory决定实例化哪个产品类。",
+            "优点：\n1. 符合开闭原则，新增产品无需修改现有代码\n2. 符合单一职责原则\n3. 解耦产品创建和使用\n\n缺点：\n1. 类的数量增多\n2. 增加系统复杂性\n3. 产品的创建完全依赖工厂类",
+            "相关模式：\n- 抽象工厂模式经常使用工厂方法模式\n- 原型模式可以用工厂方法模式实现\n- 模板方法模式可以用工厂方法模式",
+            "Spring的FactoryBean接口使用工厂方法模式创建Bean对象。",
+            "1. Collection.iterator() - 返回迭代器\n2. Class.newInstance() - 创建对象实例\n3. Calendar.getInstance() - 获取日历实例",
+            "1. 日志框架中的Logger创建\n2. 数据库驱动加载\n3. 连接池工厂",
+            """
+classDiagram
+    class Product {
+        <<interface>>
+        +use()
+    }
+    class ConcreteProductA {
+        +use()
+    }
+    class ConcreteProductB {
+        +use()
+    }
+    class Factory {
+        <<interface>>
+        +createProduct()
+    }
+    class ConcreteFactoryA {
+        +createProduct()
+    }
+    class ConcreteFactoryB {
+        +createProduct()
+    }
+
+    Product <|.. ConcreteProductA
+    Product <|.. ConcreteProductB
+    Factory <|.. ConcreteFactoryA
+    Factory <|.. ConcreteFactoryB
+    Factory ..> Product
+    ConcreteFactoryA ..> ConcreteProductA
+    ConcreteFactoryB ..> ConcreteProductB
+"""
+        );
+        patterns.add(factoryMethod);
     }
 
     public List<Pattern> findAll() {
