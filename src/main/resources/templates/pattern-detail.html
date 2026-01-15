@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${pattern.name}">单例模式</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -55,7 +57,12 @@
 
         <section id="code" class="tab-content">
             <h2>示例代码</h2>
-            <pre class="code-block" th:text="${pattern.codeExample}"></pre>
+            <div class="code-files">
+                <div class="code-file" th:each="codeFile : ${pattern.codeExample}">
+                    <h3 class="file-name" th:text="${codeFile.fileName}">FileName.java</h3>
+                    <pre class="code-block"><code class="language-java" th:text="${codeFile.content}"></code></pre>
+                </div>
+            </div>
             <button class="btn run-btn" onclick="runExample()">运行示例</button>
             <div id="output" class="output hidden"></div>
         </section>
@@ -83,21 +90,12 @@
         let originalMermaidCode = '';
         let diagramInitialized = false;
 
-        // 在页面加载完成后立即保存原始代码
-        document.addEventListener('DOMContentLoaded', function() {
-            const mermaidDiv = document.querySelector('.mermaid');
-            if (mermaidDiv) {
-                originalMermaidCode = mermaidDiv.textContent.trim();
-                console.log('Original mermaid code saved:', originalMermaidCode.substring(0, 100));
-            }
-        });
-
         // 渲染 Mermaid 图表
         async function renderMermaidDiagram() {
             const mermaidDiv = document.querySelector('.mermaid');
             if (!mermaidDiv || diagramInitialized) return;
 
-            // 使用保存的原始代码，而不是当前的内容
+            // 使用保存的原始代码
             const diagramCode = originalMermaidCode;
             if (!diagramCode) {
                 console.error('No original mermaid code found');
@@ -123,6 +121,20 @@
             }
         }
 
+        // 在页面加载完成后立即保存原始代码并预渲染图表
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 初始化 highlight.js
+            hljs.highlightAll();
+
+            const mermaidDiv = document.querySelector('.mermaid');
+            if (mermaidDiv) {
+                originalMermaidCode = mermaidDiv.textContent.trim();
+                console.log('Original mermaid code saved:', originalMermaidCode.substring(0, 100));
+                // 预先渲染图表，避免首次切换时的抖动
+                await renderMermaidDiagram();
+            }
+        });
+
         // 标签切换
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -131,12 +143,6 @@
                 tab.classList.add('active');
                 const tabContent = document.getElementById(tab.dataset.tab);
                 tabContent.classList.add('active');
-
-                // 切换到类图标签时，渲染 Mermaid 图表
-                if (tab.dataset.tab === 'diagram') {
-                    // 使用 setTimeout 确保 DOM 更新完成
-                    setTimeout(renderMermaidDiagram, 50);
-                }
             });
         });
 

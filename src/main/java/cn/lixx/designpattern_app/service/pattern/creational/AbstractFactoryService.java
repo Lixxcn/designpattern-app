@@ -1,4 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
+import cn.lixx.designpattern_app.model.CodeFile;
+import java.util.List;
 
 import cn.lixx.designpattern_app.service.pattern.creational.abstractfactory.*;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
@@ -39,7 +41,7 @@ public class AbstractFactoryService {
     /**
      * 从 abstractfactory 包读取所有示例代码
      */
-    public String getCodeExample() {
+    public List<CodeFile> getCodeExample() {
         return codeReaderUtil.readCodeFromPackage(
             "cn.lixx.designpattern_app.service.pattern.creational.abstractfactory"
         );

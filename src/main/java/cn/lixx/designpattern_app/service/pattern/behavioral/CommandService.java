@@ -1,4 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
+import cn.lixx.designpattern_app.model.CodeFile;
+import java.util.List;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.command.*;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
@@ -48,7 +50,7 @@ public class CommandService {
     /**
      * 从 command 包读取所有示例代码
      */
-    public String getCodeExample() {
+    public List<CodeFile> getCodeExample() {
         return codeReaderUtil.readCodeFromPackage(
             "cn.lixx.designpattern_app.service.pattern.behavioral.command"
         );

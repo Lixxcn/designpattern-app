@@ -1,4 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
+import cn.lixx.designpattern_app.model.CodeFile;
+import java.util.List;
 
 import cn.lixx.designpattern_app.service.pattern.creational.prototype.ConcretePrototype;
 import cn.lixx.designpattern_app.service.pattern.creational.prototype.Prototype;
@@ -70,7 +72,7 @@ public class PrototypeService {
     /**
      * 从 prototype 包读取所有示例代码
      */
-    public String getCodeExample() {
+    public List<CodeFile> getCodeExample() {
         return codeReaderUtil.readCodeFromPackage(
             "cn.lixx.designpattern_app.service.pattern.creational.prototype"
         );

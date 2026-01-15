@@ -1,8 +1,11 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
+import cn.lixx.designpattern_app.model.CodeFile;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,14 +31,17 @@ class ObserverServiceTest {
     @DisplayName("应该返回代码示例")
     void testGetCodeExample() {
         // When
-        String codeExample = observerService.getCodeExample();
+        List<CodeFile> codeExample = observerService.getCodeExample();
 
         // Then
         assertThat(codeExample).isNotEmpty();
-        assertThat(codeExample).contains("interface Observer");
-        assertThat(codeExample).contains("abstract class Subject");
-        assertThat(codeExample).contains("attach(");
-        assertThat(codeExample).contains("detach(");
+        String combinedCode = codeExample.stream()
+                .map(CodeFile::getContent)
+                .reduce("", (a, b) -> a + b);
+        assertThat(combinedCode).contains("interface Observer");
+        assertThat(combinedCode).contains("abstract class Subject");
+        assertThat(combinedCode).contains("attach(");
+        assertThat(combinedCode).contains("detach(");
     }
 
     @Test

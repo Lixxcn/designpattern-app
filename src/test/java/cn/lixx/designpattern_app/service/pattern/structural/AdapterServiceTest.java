@@ -1,8 +1,11 @@
 package cn.lixx.designpattern_app.service.pattern.structural;
 
+import cn.lixx.designpattern_app.model.CodeFile;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,13 +30,16 @@ class AdapterServiceTest {
     @DisplayName("应该返回代码示例")
     void testGetCodeExample() {
         // When
-        String codeExample = adapterService.getCodeExample();
+        List<CodeFile> codeExample = adapterService.getCodeExample();
 
         // Then
         assertThat(codeExample).isNotEmpty();
-        assertThat(codeExample).contains("interface Target");
-        assertThat(codeExample).contains("class Adaptee");
-        assertThat(codeExample).contains("class Adapter");
+        String combinedCode = codeExample.stream()
+                .map(CodeFile::getContent)
+                .reduce("", (a, b) -> a + b);
+        assertThat(combinedCode).contains("interface Target");
+        assertThat(combinedCode).contains("class Adaptee");
+        assertThat(combinedCode).contains("class Adapter");
     }
 
     @Test

@@ -1,4 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
+import cn.lixx.designpattern_app.model.CodeFile;
+import java.util.List;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.strategy.*;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
@@ -42,7 +44,7 @@ public class StrategyService {
     /**
      * 从 strategy 包读取所有示例代码
      */
-    public String getCodeExample() {
+    public List<CodeFile> getCodeExample() {
         return codeReaderUtil.readCodeFromPackage(
             "cn.lixx.designpattern_app.service.pattern.behavioral.strategy"
         );

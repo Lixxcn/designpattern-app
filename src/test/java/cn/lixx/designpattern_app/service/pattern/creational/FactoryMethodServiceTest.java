@@ -1,8 +1,11 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
 
+import cn.lixx.designpattern_app.model.CodeFile;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,13 +31,16 @@ class FactoryMethodServiceTest {
     @DisplayName("应该返回代码示例")
     void testGetCodeExample() {
         // When
-        String codeExample = factoryMethodService.getCodeExample();
+        List<CodeFile> codeExample = factoryMethodService.getCodeExample();
 
         // Then
         assertThat(codeExample).isNotEmpty();
-        assertThat(codeExample).contains("interface Product");
-        assertThat(codeExample).contains("interface Factory");
-        assertThat(codeExample).contains("createProduct()");
+        String combinedCode = codeExample.stream()
+                .map(CodeFile::getContent)
+                .reduce("", (a, b) -> a + b);
+        assertThat(combinedCode).contains("interface Product");
+        assertThat(combinedCode).contains("interface Factory");
+        assertThat(combinedCode).contains("createProduct()");
     }
 
     @Test

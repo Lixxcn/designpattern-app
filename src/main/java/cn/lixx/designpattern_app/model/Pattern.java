@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @Builder
@@ -26,6 +28,6 @@ public class Pattern {
     private String jdkExample;
     private String realWorldExample;
     // 这些字段现在由 Controller 从 Service 动态获取
-    private transient String codeExample;
+    private transient List<CodeFile> codeExample;
     private transient String mermaidDiagram;
 }

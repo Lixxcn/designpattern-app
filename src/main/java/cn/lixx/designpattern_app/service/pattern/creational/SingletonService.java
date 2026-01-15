@@ -1,8 +1,11 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
 
+import cn.lixx.designpattern_app.model.CodeFile;
 import cn.lixx.designpattern_app.service.pattern.creational.singleton.Client;
 import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SingletonService {
@@ -20,7 +23,7 @@ public class SingletonService {
     /**
      * 从 singleton 包读取所有示例代码
      */
-    public String getCodeExample() {
+    public List<CodeFile> getCodeExample() {
         return codeReaderUtil.readCodeFromPackage(
             "cn.lixx.designpattern_app.service.pattern.creational.singleton",
             "Client" // 排除 Client 类，因为它只是演示类

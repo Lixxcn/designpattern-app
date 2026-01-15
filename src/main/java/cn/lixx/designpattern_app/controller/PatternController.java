@@ -1,9 +1,12 @@
 package cn.lixx.designpattern_app.controller;
 
+import cn.lixx.designpattern_app.model.CodeFile;
 import cn.lixx.designpattern_app.model.Pattern;
 import cn.lixx.designpattern_app.model.PatternCategory;
 import cn.lixx.designpattern_app.model.PatternDifficulty;
 import cn.lixx.designpattern_app.repository.PatternRepository;
+
+import java.util.List;
 import cn.lixx.designpattern_app.service.pattern.behavioral.*;
 import cn.lixx.designpattern_app.service.pattern.creational.*;
 import cn.lixx.designpattern_app.service.pattern.structural.*;
@@ -137,7 +140,7 @@ public class PatternController {
     /**
      * 根据模式 ID 获取代码示例
      */
-    private String getCodeExample(String patternId) {
+    private List<CodeFile> getCodeExample(String patternId) {
         return switch (patternId) {
             // 创建型模式
             case "singleton" -> singletonService.getCodeExample();
@@ -165,7 +168,7 @@ public class PatternController {
             case "strategy" -> strategyService.getCodeExample();
             case "template" -> templateService.getCodeExample();
             case "visitor" -> visitorService.getCodeExample();
-            default -> "// 未找到代码示例";
+            default -> List.of(new CodeFile("// 提示", "// 未找到代码示例"));
         };
     }
 

@@ -1,4 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
+import cn.lixx.designpattern_app.model.CodeFile;
+import java.util.List;
 
 import cn.lixx.designpattern_app.service.pattern.creational.builder.Director;
 import cn.lixx.designpattern_app.service.pattern.creational.builder.Product;
@@ -50,7 +52,7 @@ public class BuilderService {
     /**
      * 从 builder 包读取所有示例代码
      */
-    public String getCodeExample() {
+    public List<CodeFile> getCodeExample() {
         return codeReaderUtil.readCodeFromPackage(
             "cn.lixx.designpattern_app.service.pattern.creational.builder"
         );

@@ -1,11 +1,13 @@
 package cn.lixx.designpattern_app.util;
 
+import cn.lixx.designpattern_app.model.CodeFile;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -21,48 +23,10 @@ public class CodeReaderUtil {
      * 根据包名读取该包下所有 Java 文件的内容
      *
      * @param packageName 包名，如 "cn.lixx.designpattern_app.service.pattern.creational.singleton"
-     * @return 所有 Java 文件的内容合并字符串
+     * @return 所有 Java 文件的内容列表
      */
-    public String readCodeFromPackage(String packageName) {
-        // 将包名转换为文件路径
-        String packagePath = packageName.replace('.', '/');
-
-        // 构建完整的源代码目录路径
-        Path sourceDir = Paths.get("src/main/java", packagePath);
-
-        if (!Files.exists(sourceDir)) {
-            return "// 包不存在: " + packageName;
-        }
-
-        StringBuilder result = new StringBuilder();
-
-        try (Stream<Path> paths = Files.walk(sourceDir)) {
-            List<Path> javaFiles = paths
-                    .filter(Files::isRegularFile)
-                    .filter(p -> p.toString().endsWith(".java"))
-                    .sorted(Comparator.naturalOrder())
-                    .toList();
-
-            for (Path javaFile : javaFiles) {
-                String fileName = javaFile.getFileName().toString();
-                try {
-                    String content = Files.readString(javaFile);
-                    result.append("// ").append(fileName).append("\n");
-                    result.append(content).append("\n\n");
-                } catch (IOException e) {
-                    result.append("// 无法读取文件: ").append(fileName).append("\n\n");
-                }
-            }
-
-            if (javaFiles.isEmpty()) {
-                result.append("// 该包下没有 Java 文件\n");
-            }
-
-        } catch (IOException e) {
-            return "// 读取包内容时出错: " + e.getMessage();
-        }
-
-        return result.toString();
+    public List<CodeFile> readCodeFromPackage(String packageName) {
+        return readCodeFromPackage(packageName, new String[0]);
     }
 
     /**
@@ -70,17 +34,21 @@ public class CodeReaderUtil {
      *
      * @param packageName 包名
      * @param excludeClasses 要排除的类名列表
-     * @return 所有 Java 文件的内容合并字符串
+     * @return 所有 Java 文件的内容列表
      */
-    public String readCodeFromPackage(String packageName, String... excludeClasses) {
+    public List<CodeFile> readCodeFromPackage(String packageName, String... excludeClasses) {
         String packagePath = packageName.replace('.', '/');
         Path sourceDir = Paths.get("src/main/java", packagePath);
 
-        if (!Files.exists(sourceDir)) {
-            return "// 包不存在: " + packageName;
-        }
+        List<CodeFile> result = new ArrayList<>();
 
-        StringBuilder result = new StringBuilder();
+        if (!Files.exists(sourceDir)) {
+            result.add(CodeFile.builder()
+                    .fileName("// 错误")
+                    .content("// 包不存在: " + packageName)
+                    .build());
+            return result;
+        }
 
         try (Stream<Path> paths = Files.walk(sourceDir)) {
             List<Path> javaFiles = paths
@@ -102,21 +70,32 @@ public class CodeReaderUtil {
                 String fileName = javaFile.getFileName().toString();
                 try {
                     String content = Files.readString(javaFile);
-                    result.append("// ").append(fileName).append("\n");
-                    result.append(content).append("\n\n");
+                    result.add(CodeFile.builder()
+                            .fileName(fileName)
+                            .content(content)
+                            .build());
                 } catch (IOException e) {
-                    result.append("// 无法读取文件: ").append(fileName).append("\n\n");
+                    result.add(CodeFile.builder()
+                            .fileName(fileName)
+                            .content("// 无法读取文件: " + fileName)
+                            .build());
                 }
             }
 
             if (javaFiles.isEmpty()) {
-                result.append("// 该包下没有 Java 文件\n");
+                result.add(CodeFile.builder()
+                        .fileName("// 提示")
+                        .content("// 该包下没有 Java 文件")
+                        .build());
             }
 
         } catch (IOException e) {
-            return "// 读取包内容时出错: " + e.getMessage();
+            result.add(CodeFile.builder()
+                    .fileName("// 错误")
+                    .content("// 读取包内容时出错: " + e.getMessage())
+                    .build());
         }
 
-        return result.toString();
+        return result;
     }
 }
