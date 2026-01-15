@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pattern.name}">单例模式</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <header>
+        <a href="/" class="back-btn">&larr; 返回</a>
+        <h1>
+            <span th:text="${pattern.name}">单例模式</span>
+            <small th:text="${pattern.nameEn}">Singleton Pattern</small>
+        </h1>
+    </header>
+
+    <main class="detail">
+        <nav class="tabs">
+            <button class="tab active" data-tab="description">模式说明</button>
+            <button class="tab" data-tab="diagram">类图</button>
+            <button class="tab" data-tab="code">示例代码</button>
+            <button class="tab" data-tab="examples">应用案例</button>
+        </nav>
+
+        <section id="description" class="tab-content active">
+            <h2>模式说明</h2>
+            <div class="field">
+                <h3>定义</h3>
+                <p th:text="${pattern.definition}"></p>
+            </div>
+            <div class="field">
+                <h3>意图</h3>
+                <p th:text="${pattern.intent}"></p>
+            </div>
+            <div class="field">
+                <h3>适用场景</h3>
+                <p th:text="${pattern.useCases}"></p>
+            </div>
+            <div class="field">
+                <h3>优缺点</h3>
+                <p th:text="${pattern.prosCons}"></p>
+            </div>
+            <div class="field">
+                <h3>相关模式</h3>
+                <p th:text="${pattern.relatedPatterns}"></p>
+            </div>
+        </section>
+
+        <section id="diagram" class="tab-content">
+            <h2>Mermaid类图</h2>
+            <div class="mermaid" th:text="${pattern.mermaidDiagram}"></div>
+        </section>
+
+        <section id="code" class="tab-content">
+            <h2>示例代码</h2>
+            <pre class="code-block" th:text="${pattern.codeExample}"></pre>
+            <button class="btn run-btn" onclick="runExample()">运行示例</button>
+            <div id="output" class="output hidden"></div>
+        </section>
+
+        <section id="examples" class="tab-content">
+            <h2>实际应用案例</h2>
+            <div class="field">
+                <h3>Spring框架</h3>
+                <p th:text="${pattern.springExample}"></p>
+            </div>
+            <div class="field">
+                <h3>JDK</h3>
+                <p th:text="${pattern.jdkExample}"></p>
+            </div>
+            <div class="field">
+                <h3>实际项目</h3>
+                <p th:text="${pattern.realWorldExample}"></p>
+            </div>
+        </section>
+    </main>
+
+    <script th:src="@{/js/app.js}"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+
+        // 标签切换
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        function runExample() {
+            const patternId = '[[${pattern.id}]]';
+            fetch('/execute/' + patternId)
+                .then(r => r.json())
+                .then(data => {
+                    const output = document.getElementById('output');
+                    output.textContent = data.output;
+                    output.classList.remove('hidden');
+                });
+        }
+    </script>
+</body>
+</html>

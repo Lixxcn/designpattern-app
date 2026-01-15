@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计模式学习应用</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>设计模式学习应用</h1>
+        <nav>
+            <a th:href="@{/}">全部</a>
+            <th:block th:each="category : ${categories}">
+                <a th:href="@{/category/{cat}(cat=${category})}"
+                   th:text="${category.displayName}"></a>
+            </th:block>
+        </nav>
+    </header>
+
+    <main>
+        <aside>
+            <h3>难度筛选</h3>
+            <div class="difficulty-filter">
+                <label>
+                    <input type="radio" name="difficulty" value="" checked onchange="filterByDifficulty('')">
+                    全部
+                </label>
+                <th:block th:each="difficulty : ${difficulties}">
+                    <label>
+                        <input type="radio" name="difficulty"
+                               th:value="${difficulty}"
+                               th:checked="${selectedDifficulty == difficulty}"
+                               th:onchange="'filterByDifficulty(\'' + ${difficulty} + '\')'">
+                        <span th:text="${difficulty.displayName}"></span>
+                    </label>
+                </th:block>
+            </div>
+        </aside>
+
+        <section class="pattern-grid">
+            <div class="pattern-card" th:each="pattern : ${patterns}">
+                <h3 th:text="${pattern.name}">单例模式</h3>
+                <p class="name-en" th:text="${pattern.nameEn}">Singleton Pattern</p>
+                <p class="definition" th:text="${pattern.definition}">保证一个类仅有一个实例</p>
+                <div class="meta">
+                    <span class="category" th:text="${pattern.category.displayName}">创建型</span>
+                    <span class="difficulty" th:text="${pattern.difficulty.displayName}">初级</span>
+                </div>
+                <a th:href="@{/pattern/{id}(id=${pattern.id})}" class="btn">查看详情 &rarr;</a>
+            </div>
+        </section>
+    </main>
+
+    <script th:src="@{/js/app.js}"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+        function filterByDifficulty(difficulty) {
+            if (difficulty) {
+                window.location.href = '/difficulty/' + difficulty;
+            } else {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>
