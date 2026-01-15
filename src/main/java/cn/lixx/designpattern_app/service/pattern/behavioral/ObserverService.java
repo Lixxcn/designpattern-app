@@ -3,10 +3,17 @@ package cn.lixx.designpattern_app.service.pattern.behavioral;
 import cn.lixx.designpattern_app.service.pattern.behavioral.observer.ConcreteObserver;
 import cn.lixx.designpattern_app.service.pattern.behavioral.observer.ConcreteSubject;
 import cn.lixx.designpattern_app.service.pattern.behavioral.observer.Observer;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ObserverService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public ObserverService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -42,65 +49,13 @@ public class ObserverService {
         return output.toString();
     }
 
+    /**
+     * 从 observer 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 观察者接口
-interface Observer {
-    void update(String message);
-}
-
-// 主题抽象类
-abstract class Subject {
-    protected List<Observer> observers = new ArrayList<>();
-
-    public void attach(Observer observer) {
-        observers.add(observer);
-    }
-
-    public void detach(Observer observer) {
-        observers.remove(observer);
-    }
-
-    protected void notifyObservers(String message) {
-        for (Observer observer : observers) {
-            observer.update(message);
-        }
-    }
-}
-
-// 具体主题
-class ConcreteSubject extends Subject {
-    private String state;
-
-    public void setState(String state) {
-        this.state = state;
-        notifyObservers(state);
-    }
-}
-
-// 具体观察者
-class ConcreteObserver implements Observer {
-    private String name;
-
-    public ConcreteObserver(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void update(String message) {
-        System.out.println(name + " 收到: " + message);
-    }
-}
-
-// 使用示例
-ConcreteSubject subject = new ConcreteSubject();
-Observer observer1 = new ConcreteObserver("张三");
-Observer observer2 = new ConcreteObserver("李四");
-
-subject.attach(observer1);
-subject.attach(observer2);
-subject.setState("新消息");
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.observer"
+        );
     }
 
     public String getMermaidDiagram() {

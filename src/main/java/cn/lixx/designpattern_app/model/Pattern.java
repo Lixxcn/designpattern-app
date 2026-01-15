@@ -25,6 +25,7 @@ public class Pattern {
     private String springExample;
     private String jdkExample;
     private String realWorldExample;
-    private String mermaidDiagram;
-    private String codeExample;
+    // 这些字段现在由 Controller 从 Service 动态获取
+    private transient String codeExample;
+    private transient String mermaidDiagram;
 }

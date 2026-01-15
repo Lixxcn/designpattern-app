@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.structural;
 
 import cn.lixx.designpattern_app.service.pattern.structural.bridge.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BridgeService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public BridgeService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -43,56 +50,13 @@ public class BridgeService {
         return output.toString();
     }
 
+    /**
+     * 从 bridge 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 实现化接口 - 颜色
-interface Color {
-    String apply();
-}
-
-// 具体实现化
-class RedColor implements Color {
-    @Override
-    public String apply() {
-        return "红色";
-    }
-}
-
-class BlueColor implements Color {
-    @Override
-    public String apply() {
-        return "蓝色";
-    }
-}
-
-// 抽象化类 - 形状
-abstract class Shape {
-    protected Color color;
-
-    public Shape(Color color) {
-        this.color = color;
-    }
-
-    public abstract void draw();
-}
-
-// 扩展抽象化
-class Circle extends Shape {
-    public Circle(Color color) {
-        super(color);
-    }
-
-    @Override
-    public void draw() {
-        System.out.println("绘制" + color.apply() + "的圆形");
-    }
-}
-
-// 使用示例
-Color red = new RedColor();
-Shape redCircle = new Circle(red);
-redCircle.draw();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.bridge"
+        );
     }
 
     public String getMermaidDiagram() {

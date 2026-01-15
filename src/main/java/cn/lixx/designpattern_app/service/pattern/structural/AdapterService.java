@@ -3,10 +3,17 @@ package cn.lixx.designpattern_app.service.pattern.structural;
 import cn.lixx.designpattern_app.service.pattern.structural.adapter.Adapter;
 import cn.lixx.designpattern_app.service.pattern.structural.adapter.Adaptee;
 import cn.lixx.designpattern_app.service.pattern.structural.adapter.Target;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AdapterService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public AdapterService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -26,39 +33,13 @@ public class AdapterService {
         return output.toString();
     }
 
+    /**
+     * 从 adapter 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 目标接口
-interface Target {
-    void request();
-}
-
-// 被适配者类
-class Adaptee {
-    public void specificRequest() {
-        System.out.println("被适配者的特殊请求");
-    }
-}
-
-// 适配器类
-class Adapter implements Target {
-    private Adaptee adaptee;
-
-    public Adapter(Adaptee adaptee) {
-        this.adaptee = adaptee;
-    }
-
-    @Override
-    public void request() {
-        adaptee.specificRequest();
-    }
-}
-
-// 使用示例
-Adaptee adaptee = new Adaptee();
-Target target = new Adapter(adaptee);
-target.request();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.adapter"
+        );
     }
 
     public String getMermaidDiagram() {

@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.mediator.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MediatorService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public MediatorService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -31,74 +38,13 @@ public class MediatorService {
         return output.toString();
     }
 
+    /**
+     * 从 mediator 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 中介者接口
-interface Mediator {
-    void sendMessage(String message, Colleague colleague);
-}
-
-// 同事抽象类
-abstract class Colleague {
-    protected Mediator mediator;
-
-    public Colleague(Mediator mediator) {
-        this.mediator = mediator;
-    }
-
-    public abstract void receive(String message);
-
-    public void send(String message) {
-        mediator.sendMessage(message, this);
-    }
-}
-
-// 具体中介者
-class ConcreteMediator implements Mediator {
-    private ConcreteColleague1 colleague1;
-    private ConcreteColleague2 colleague2;
-
-    public void setColleague1(ConcreteColleague1 colleague1) {
-        this.colleague1 = colleague1;
-    }
-
-    public void setColleague2(ConcreteColleague2 colleague2) {
-        this.colleague2 = colleague2;
-    }
-
-    @Override
-    public void sendMessage(String message, Colleague colleague) {
-        if (colleague == colleague1) {
-            colleague2.receive(message);
-        } else {
-            colleague1.receive(message);
-        }
-    }
-}
-
-// 具体同事
-class ConcreteColleague1 extends Colleague {
-    public ConcreteColleague1(Mediator mediator) {
-        super(mediator);
-    }
-
-    @Override
-    public void receive(String message) {
-        System.out.println("同事1收到: " + message);
-    }
-}
-
-// 使用示例
-ConcreteMediator mediator = new ConcreteMediator();
-ConcreteColleague1 c1 = new ConcreteColleague1(mediator);
-ConcreteColleague2 c2 = new ConcreteColleague2(mediator);
-
-mediator.setColleague1(c1);
-mediator.setColleague2(c2);
-
-c1.send("你好");
-c2.send("你好");
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.mediator"
+        );
     }
 
     public String getMermaidDiagram() {

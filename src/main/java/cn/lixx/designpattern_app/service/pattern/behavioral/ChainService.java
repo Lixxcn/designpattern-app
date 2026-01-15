@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.chain.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ChainService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public ChainService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -36,51 +43,13 @@ public class ChainService {
         return output.toString();
     }
 
+    /**
+     * 从 chain 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 处理者抽象类
-abstract class Handler {
-    protected Handler nextHandler;
-
-    public Handler setNext(Handler nextHandler) {
-        this.nextHandler = nextHandler;
-        return nextHandler;
-    }
-
-    public abstract void handleRequest(String request);
-}
-
-// 具体处理者A
-class ConcreteHandlerA extends Handler {
-    @Override
-    public void handleRequest(String request) {
-        if (request.equals("普通请求")) {
-            System.out.println("HandlerA 处理");
-        } else if (nextHandler != null) {
-            nextHandler.handleRequest(request);
-        }
-    }
-}
-
-// 具体处理者B
-class ConcreteHandlerB extends Handler {
-    @Override
-    public void handleRequest(String request) {
-        if (request.equals("重要请求")) {
-            System.out.println("HandlerB 处理");
-        } else if (nextHandler != null) {
-            nextHandler.handleRequest(request);
-        }
-    }
-}
-
-// 使用示例
-Handler handlerA = new ConcreteHandlerA();
-Handler handlerB = new ConcreteHandlerB();
-
-handlerA.setNext(handlerB);
-handlerA.handleRequest("重要请求");
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.chain"
+        );
     }
 
     public String getMermaidDiagram() {

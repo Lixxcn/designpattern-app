@@ -110,7 +110,6 @@ class PatternRepositoryTest {
         assertThat(pattern.get().getNameEn()).isEqualTo("Singleton Pattern");
         assertThat(pattern.get().getCategory()).isEqualTo(PatternCategory.CREATIONAL);
         assertThat(pattern.get().getDifficulty()).isEqualTo(PatternDifficulty.BEGINNER);
-        assertThat(pattern.get().getCodeExample()).isNotEmpty();
     }
 
     @Test
@@ -123,7 +122,6 @@ class PatternRepositoryTest {
         assertThat(pattern).isPresent();
         assertThat(pattern.get().getId()).isEqualTo("factory-method");
         assertThat(pattern.get().getName()).isEqualTo("工厂方法模式");
-        assertThat(pattern.get().getCodeExample()).isNotEmpty();
     }
 
     @Test
@@ -158,9 +156,7 @@ class PatternRepositoryTest {
                 p.getRelatedPatterns() != null && !p.getRelatedPatterns().isEmpty() &&
                 p.getSpringExample() != null && !p.getSpringExample().isEmpty() &&
                 p.getJdkExample() != null && !p.getJdkExample().isEmpty() &&
-                p.getRealWorldExample() != null && !p.getRealWorldExample().isEmpty() &&
-                p.getMermaidDiagram() != null && !p.getMermaidDiagram().isEmpty() &&
-                p.getCodeExample() != null && !p.getCodeExample().isEmpty()
+                p.getRealWorldExample() != null && !p.getRealWorldExample().isEmpty()
         );
     }
 

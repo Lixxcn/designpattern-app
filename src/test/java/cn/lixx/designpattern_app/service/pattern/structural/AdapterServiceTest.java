@@ -1,5 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.structural;
 
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -8,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("AdapterService 单元测试")
 class AdapterServiceTest {
 
-    private final AdapterService adapterService = new AdapterService();
+    private final AdapterService adapterService = new AdapterService(new CodeReaderUtil());
 
     @Test
     @DisplayName("应该成功执行适配器模式演示")

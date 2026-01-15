@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.state.VendingMachine;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StateService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public StateService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -30,82 +37,13 @@ public class StateService {
         return output.toString();
     }
 
+    /**
+     * 从 state 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 状态接口
-interface State {
-    void insertCoin();
-    void ejectCoin();
-    void turnCrank();
-}
-
-// 具体状态 - 没有硬币
-class NoCoinState implements State {
-    @Override
-    public void insertCoin() {
-        System.out.println("已投币");
-    }
-
-    @Override
-    public void ejectCoin() {
-        System.out.println("没有硬币，无法退币");
-    }
-
-    @Override
-    public void turnCrank() {
-        System.out.println("请先投币");
-    }
-}
-
-// 具体状态 - 有硬币
-class HasCoinState implements State {
-    @Override
-    public void insertCoin() {
-        System.out.println("已有硬币");
-    }
-
-    @Override
-    public void ejectCoin() {
-        System.out.println("退币成功");
-    }
-
-    @Override
-    public void turnCrank() {
-        System.out.println("售货中");
-    }
-}
-
-// 上下文类
-class VendingMachine {
-    private State noCoinState;
-    private State hasCoinState;
-    private State currentState;
-
-    public VendingMachine() {
-        noCoinState = new NoCoinState();
-        hasCoinState = new HasCoinState();
-        currentState = noCoinState;
-    }
-
-    public void setState(State state) {
-        this.currentState = state;
-    }
-
-    public void insertCoin() {
-        currentState.insertCoin();
-        if (currentState == noCoinState) {
-            setState(hasCoinState);
-        }
-    }
-
-    // ...其他方法
-}
-
-// 使用示例
-VendingMachine machine = new VendingMachine();
-machine.insertCoin();
-machine.turnCrank();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.state"
+        );
     }
 
     public String getMermaidDiagram() {

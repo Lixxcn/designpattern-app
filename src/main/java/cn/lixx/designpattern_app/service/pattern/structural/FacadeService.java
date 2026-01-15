@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.structural;
 
 import cn.lixx.designpattern_app.service.pattern.structural.facade.ComputerFacade;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FacadeService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public FacadeService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -21,56 +28,13 @@ public class FacadeService {
         return output.toString();
     }
 
+    /**
+     * 从 facade 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 子系统类
-class CPU {
-    public void start() { System.out.println("CPU启动"); }
-    public void shutdown() { System.out.println("CPU关闭"); }
-}
-
-class Memory {
-    public void load() { System.out.println("内存加载"); }
-    public void unload() { System.out.println("内存释放"); }
-}
-
-class HardDrive {
-    public void read() { System.out.println("硬盘读取"); }
-    public void write() { System.out.println("硬盘写入"); }
-}
-
-// 外观类
-class ComputerFacade {
-    private CPU cpu;
-    private Memory memory;
-    private HardDrive hardDrive;
-
-    public ComputerFacade() {
-        this.cpu = new CPU();
-        this.memory = new Memory();
-        this.hardDrive = new HardDrive();
-    }
-
-    public void startComputer() {
-        hardDrive.read();
-        memory.load();
-        cpu.start();
-        System.out.println("电脑启动完成");
-    }
-
-    public void shutdownComputer() {
-        cpu.shutdown();
-        memory.unload();
-        hardDrive.write();
-        System.out.println("电脑已关闭");
-    }
-}
-
-// 使用示例
-ComputerFacade computer = new ComputerFacade();
-computer.startComputer();
-computer.shutdownComputer();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.facade"
+        );
     }
 
     public String getMermaidDiagram() {

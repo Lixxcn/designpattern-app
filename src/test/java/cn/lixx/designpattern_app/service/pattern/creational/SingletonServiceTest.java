@@ -1,5 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
 
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -8,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("SingletonService 单元测试")
 class SingletonServiceTest {
 
-    private final SingletonService singletonService = new SingletonService();
+    private final SingletonService singletonService = new SingletonService(new CodeReaderUtil());
 
     @Test
     @DisplayName("应该成功执行单例模式演示")

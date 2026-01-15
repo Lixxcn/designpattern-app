@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.interpreter.Context;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InterpreterService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public InterpreterService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -34,92 +41,13 @@ public class InterpreterService {
         return output.toString();
     }
 
+    /**
+     * 从 interpreter 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 表达式接口
-interface Expression {
-    int interpret();
-}
-
-// 终结符表达式 - 数字
-class NumberExpression implements Expression {
-    private int number;
-
-    public NumberExpression(int number) {
-        this.number = number;
-    }
-
-    @Override
-    public int interpret() {
-        return number;
-    }
-}
-
-// 非终结符表达式 - 加法
-class AddExpression implements Expression {
-    private Expression left;
-    private Expression right;
-
-    public AddExpression(Expression left, Expression right) {
-        this.left = left;
-        this.right = right;
-    }
-
-    @Override
-    public int interpret() {
-        return left.interpret() + right.interpret();
-    }
-}
-
-// 非终结符表达式 - 减法
-class SubtractExpression implements Expression {
-    private Expression left;
-    private Expression right;
-
-    public SubtractExpression(Expression left, Expression right) {
-        this.left = left;
-        this.right = right;
-    }
-
-    @Override
-    public int interpret() {
-        return left.interpret() - right.interpret();
-    }
-}
-
-// 上下文类
-class Context {
-    private Expression expression;
-
-    public void parse(String formula) {
-        // 解析表达式
-        // 简化实现：解析 "5 + 3 - 2"
-        String[] parts = formula.split(" ");
-        Expression expr = new NumberExpression(Integer.parseInt(parts[0]));
-
-        for (int i = 1; i < parts.length; i += 2) {
-            String op = parts[i];
-            int num = Integer.parseInt(parts[i + 1]);
-            if (op.equals("+")) {
-                expr = new AddExpression(expr, new NumberExpression(num));
-            } else if (op.equals("-")) {
-                expr = new SubtractExpression(expr, new NumberExpression(num));
-            }
-        }
-        this.expression = expr;
-    }
-
-    public int calculate() {
-        return expression.interpret();
-    }
-}
-
-// 使用示例
-Context context = new Context();
-context.parse("5 + 3 - 2");
-int result = context.calculate();
-System.out.println("结果: " + result);
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.interpreter"
+        );
     }
 
     public String getMermaidDiagram() {

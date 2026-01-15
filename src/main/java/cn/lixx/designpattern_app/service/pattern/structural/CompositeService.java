@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.structural;
 
 import cn.lixx.designpattern_app.service.pattern.structural.composite.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CompositeService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public CompositeService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -38,62 +45,13 @@ public class CompositeService {
         return output.toString();
     }
 
+    /**
+     * 从 composite 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 组件接口
-interface Component {
-    void operation();
-    void add(Component component);
-    void remove(Component component);
-    Component getChild(int i);
-}
-
-// 叶子节点
-class Leaf implements Component {
-    private String name;
-
-    public Leaf(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void operation() {
-        System.out.println("叶子: " + name);
-    }
-
-    @Override
-    public void add(Component component) {
-        // 叶子不能添加子节点
-    }
-
-    // ...其他方法
-}
-
-// 组合节点
-class Composite implements Component {
-    private List<Component> children = new ArrayList<>();
-
-    @Override
-    public void operation() {
-        for (Component child : children) {
-            child.operation();
-        }
-    }
-
-    @Override
-    public void add(Component component) {
-        children.add(component);
-    }
-
-    // ...其他方法
-}
-
-// 使用示例
-Composite root = new Composite();
-root.add(new Leaf("文件1"));
-root.add(new Leaf("文件2"));
-root.operation();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.composite"
+        );
     }
 
     public String getMermaidDiagram() {

@@ -2,10 +2,17 @@ package cn.lixx.designpattern_app.service.pattern.structural;
 
 import cn.lixx.designpattern_app.service.pattern.structural.proxy.Proxy;
 import cn.lixx.designpattern_app.service.pattern.structural.proxy.Subject;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProxyService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public ProxyService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -27,42 +34,13 @@ public class ProxyService {
         return output.toString();
     }
 
+    /**
+     * 从 proxy 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 主题接口
-interface Subject {
-    void request();
-}
-
-// 真实主题
-class RealSubject implements Subject {
-    @Override
-    public void request() {
-        System.out.println("执行真实请求");
-    }
-}
-
-// 代理类
-class Proxy implements Subject {
-    private RealSubject realSubject;
-
-    @Override
-    public void request() {
-        // 延迟初始化
-        if (realSubject == null) {
-            realSubject = new RealSubject();
-        }
-        // 添加额外功能
-        System.out.println("请求前...");
-        realSubject.request();
-        System.out.println("请求后...");
-    }
-}
-
-// 使用示例
-Subject proxy = new Proxy();
-proxy.request();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.proxy"
+        );
     }
 
     public String getMermaidDiagram() {

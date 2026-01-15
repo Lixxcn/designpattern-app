@@ -3,10 +3,17 @@ package cn.lixx.designpattern_app.service.pattern.behavioral;
 import cn.lixx.designpattern_app.service.pattern.behavioral.template.AbstractClass;
 import cn.lixx.designpattern_app.service.pattern.behavioral.template.ConcreteClassA;
 import cn.lixx.designpattern_app.service.pattern.behavioral.template.ConcreteClassB;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TemplateService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public TemplateService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -25,45 +32,13 @@ public class TemplateService {
         return output.toString();
     }
 
+    /**
+     * 从 template 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 抽象类
-abstract class AbstractClass {
-    // 模板方法 - 定义算法骨架
-    public final void templateMethod() {
-        primitiveOperation1();
-        primitiveOperation2();
-        primitiveOperation3();
-    }
-
-    // 基本方法 - 由子类实现
-    protected abstract void primitiveOperation1();
-    protected abstract void primitiveOperation2();
-    protected abstract void primitiveOperation3();
-}
-
-// 具体类A
-class ConcreteClassA extends AbstractClass {
-    @Override
-    protected void primitiveOperation1() {
-        System.out.println("步骤1");
-    }
-
-    @Override
-    protected void primitiveOperation2() {
-        System.out.println("步骤2");
-    }
-
-    @Override
-    protected void primitiveOperation3() {
-        System.out.println("步骤3");
-    }
-}
-
-// 使用示例
-AbstractClass obj = new ConcreteClassA();
-obj.templateMethod();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.template"
+        );
     }
 
     public String getMermaidDiagram() {

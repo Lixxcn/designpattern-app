@@ -3,10 +3,17 @@ package cn.lixx.designpattern_app.service.pattern.creational;
 import cn.lixx.designpattern_app.service.pattern.creational.prototype.ConcretePrototype;
 import cn.lixx.designpattern_app.service.pattern.creational.prototype.Prototype;
 import cn.lixx.designpattern_app.service.pattern.creational.prototype.PrototypeManager;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PrototypeService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public PrototypeService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -60,38 +67,13 @@ public class PrototypeService {
         return output.toString();
     }
 
+    /**
+     * 从 prototype 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 原型接口
-public interface Prototype {
-    Prototype clone();
-}
-
-// 具体原型类
-public class ConcretePrototype implements Prototype {
-    private String title;
-    private String content;
-    private String author;
-
-    public ConcretePrototype(String title, String content, String author) {
-        this.title = title;
-        this.content = content;
-        this.author = author;
-    }
-
-    @Override
-    public Prototype clone() {
-        return new ConcretePrototype(this.title, this.content, this.author);
-    }
-
-    // Getters and Setters...
-}
-
-// 使用示例
-ConcretePrototype original = new ConcretePrototype("标题", "内容", "作者");
-ConcretePrototype cloned = (ConcretePrototype) original.clone();
-cloned.setTitle("新标题");
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.creational.prototype"
+        );
     }
 
     public String getMermaidDiagram() {

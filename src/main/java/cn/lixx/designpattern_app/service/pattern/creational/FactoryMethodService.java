@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
 
 import cn.lixx.designpattern_app.service.pattern.creational.factorymethod.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FactoryMethodService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public FactoryMethodService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -25,55 +32,13 @@ public class FactoryMethodService {
         return output.toString();
     }
 
+    /**
+     * 从 factorymethod 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 产品接口
-interface Product {
-    void use();
-}
-
-// 具体产品A
-class ConcreteProductA implements Product {
-    @Override
-    public void use() {
-        System.out.println("使用具体产品A");
-    }
-}
-
-// 具体产品B
-class ConcreteProductB implements Product {
-    @Override
-    public void use() {
-        System.out.println("使用具体产品B");
-    }
-}
-
-// 工厂接口
-interface Factory {
-    Product createProduct();
-}
-
-// 具体工厂A
-class ConcreteFactoryA implements Factory {
-    @Override
-    public Product createProduct() {
-        return new ConcreteProductA();
-    }
-}
-
-// 具体工厂B
-class ConcreteFactoryB implements Factory {
-    @Override
-    public Product createProduct() {
-        return new ConcreteProductB();
-    }
-}
-
-// 使用示例
-Factory factoryA = new ConcreteFactoryA();
-Product productA = factoryA.createProduct();
-productA.use();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.creational.factorymethod"
+        );
     }
 
     public String getMermaidDiagram() {

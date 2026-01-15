@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.structural;
 
 import cn.lixx.designpattern_app.service.pattern.structural.decorator.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DecoratorService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public DecoratorService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -39,53 +46,13 @@ public class DecoratorService {
         return output.toString();
     }
 
+    /**
+     * 从 decorator 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 组件接口
-interface Component {
-    void operation();
-}
-
-// 具体组件
-class ConcreteComponent implements Component {
-    @Override
-    public void operation() {
-        System.out.print("基础组件");
-    }
-}
-
-// 装饰器抽象类
-abstract class Decorator implements Component {
-    protected Component component;
-
-    public Decorator(Component component) {
-        this.component = component;
-    }
-
-    @Override
-    public void operation() {
-        component.operation();
-    }
-}
-
-// 具体装饰器
-class MilkDecorator extends Decorator {
-    public MilkDecorator(Component component) {
-        super(component);
-    }
-
-    @Override
-    public void operation() {
-        component.operation();
-        System.out.print(" + 牛奶");
-    }
-}
-
-// 使用示例
-Component coffee = new ConcreteComponent();
-Component coffeeWithMilk = new MilkDecorator(coffee);
-coffeeWithMilk.operation();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.decorator"
+        );
     }
 
     public String getMermaidDiagram() {

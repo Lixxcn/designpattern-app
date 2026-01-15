@@ -2,10 +2,17 @@ package cn.lixx.designpattern_app.service.pattern.creational;
 
 import cn.lixx.designpattern_app.service.pattern.creational.builder.Director;
 import cn.lixx.designpattern_app.service.pattern.creational.builder.Product;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BuilderService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public BuilderService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -40,54 +47,13 @@ public class BuilderService {
         return output.toString();
     }
 
+    /**
+     * 从 builder 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 产品类
-public class Product {
-    private String cpu;
-    private String ram;
-    private String storage;
-    // ...
-
-    private Product(Builder builder) {
-        this.cpu = builder.cpu;
-        this.ram = builder.ram;
-        // ...
-    }
-
-    public static class Builder {
-        private String cpu = "默认CPU";
-        private String ram = "8GB";
-        private String storage = "512GB SSD";
-
-        public Builder cpu(String cpu) {
-            this.cpu = cpu;
-            return this;
-        }
-
-        public Builder ram(String ram) {
-            this.ram = ram;
-            return this;
-        }
-
-        public Builder storage(String storage) {
-            this.storage = storage;
-            return this;
-        }
-
-        public Product build() {
-            return new Product(this);
-        }
-    }
-}
-
-// 使用示例
-Product product = new Product.Builder()
-    .cpu("Intel i9")
-    .ram("64GB")
-    .storage("2TB SSD")
-    .build();
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.creational.builder"
+        );
     }
 
     public String getMermaidDiagram() {

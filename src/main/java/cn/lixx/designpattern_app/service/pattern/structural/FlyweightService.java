@@ -2,10 +2,17 @@ package cn.lixx.designpattern_app.service.pattern.structural;
 
 import cn.lixx.designpattern_app.service.pattern.structural.flyweight.Flyweight;
 import cn.lixx.designpattern_app.service.pattern.structural.flyweight.FlyweightFactory;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FlyweightService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public FlyweightService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -32,46 +39,13 @@ public class FlyweightService {
         return output.toString();
     }
 
+    /**
+     * 从 flyweight 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 享元接口
-interface Flyweight {
-    void operation(String extrinsicState);
-}
-
-// 具体享元
-class ConcreteFlyweight implements Flyweight {
-    private String intrinsicState;
-
-    public ConcreteFlyweight(String intrinsicState) {
-        this.intrinsicState = intrinsicState;
-    }
-
-    @Override
-    public void operation(String extrinsicState) {
-        System.out.println("内部: " + intrinsicState + ", 外部: " + extrinsicState);
-    }
-}
-
-// 享元工厂
-class FlyweightFactory {
-    private Map<String, Flyweight> flyweights = new HashMap<>();
-
-    public Flyweight getFlyweight(String key) {
-        if (!flyweights.containsKey(key)) {
-            flyweights.put(key, new ConcreteFlyweight(key));
-        }
-        return flyweights.get(key);
-    }
-}
-
-// 使用示例
-FlyweightFactory factory = new FlyweightFactory();
-Flyweight fw1 = factory.getFlyweight("A");
-Flyweight fw2 = factory.getFlyweight("A"); // 复用
-fw1.operation("状态1");
-fw2.operation("状态2");
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.structural.flyweight"
+        );
     }
 
     public String getMermaidDiagram() {

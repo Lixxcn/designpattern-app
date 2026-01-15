@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.visitor.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VisitorService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public VisitorService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -38,81 +45,13 @@ public class VisitorService {
         return output.toString();
     }
 
+    /**
+     * 从 visitor 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 访问者接口
-interface Visitor {
-    void visit(Book book);
-    void visit(Fruit fruit);
-}
-
-// 元素接口
-interface ItemElement {
-    void accept(Visitor visitor);
-}
-
-// 具体元素 - 书
-class Book implements ItemElement {
-    private String name;
-    private int price;
-
-    public Book(String name, int price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    public String getName() { return name; }
-    public int getPrice() { return price; }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
-    }
-}
-
-// 具体元素 - 水果
-class Fruit implements ItemElement {
-    private String name;
-    private int price;
-
-    public Fruit(String name, int price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    public String getName() { return name; }
-    public int getPrice() { return price; }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
-    }
-}
-
-// 具体访问者
-class ShoppingCartVisitor implements Visitor {
-    @Override
-    public void visit(Book book) {
-        System.out.println("书: " + book.getName() + ", ¥" + book.getPrice());
-    }
-
-    @Override
-    public void visit(Fruit fruit) {
-        System.out.println("水果: " + fruit.getName() + ", ¥" + fruit.getPrice());
-    }
-}
-
-// 使用示例
-ItemElement[] items = {
-    new Book("设计模式", 89),
-    new Fruit("苹果", 10)
-};
-
-Visitor visitor = new ShoppingCartVisitor();
-for (ItemElement item : items) {
-    item.accept(visitor);
-}
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.visitor"
+        );
     }
 
     public String getMermaidDiagram() {

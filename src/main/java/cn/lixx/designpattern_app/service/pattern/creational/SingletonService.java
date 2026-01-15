@@ -1,73 +1,30 @@
 package cn.lixx.designpattern_app.service.pattern.creational;
 
 import cn.lixx.designpattern_app.service.pattern.creational.singleton.Client;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SingletonService {
 
+    private final CodeReaderUtil codeReaderUtil;
+
+    public SingletonService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
+
     public String executeExample() {
         return Client.demonstrate();
     }
 
+    /**
+     * 从 singleton 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 单例模式 - 饿汉式实现
-public class Singleton {
-    private static final Singleton INSTANCE = new Singleton();
-
-    private Singleton() {}
-
-    public static Singleton getInstance() {
-        return INSTANCE;
-    }
-}
-
-// 单例模式 - 懒汉式实现（线程不安全）
-public class LazySingleton {
-    private static LazySingleton instance;
-
-    private LazySingleton() {}
-
-    public static LazySingleton getInstance() {
-        if (instance == null) {
-            instance = new LazySingleton();
-        }
-        return instance;
-    }
-}
-
-// 单例模式 - 双重检查锁（线程安全）
-public class ThreadSafeLazySingleton {
-    private static volatile ThreadSafeLazySingleton instance;
-
-    private ThreadSafeLazySingleton() {}
-
-    public static ThreadSafeLazySingleton getInstance() {
-        if (instance == null) {
-            synchronized (ThreadSafeLazySingleton.class) {
-                if (instance == null) {
-                    instance = new ThreadSafeLazySingleton();
-                }
-            }
-        }
-        return instance;
-    }
-}
-
-// 单例模式 - 静态内部类（推荐）
-public class StaticInnerClassSingleton {
-    private StaticInnerClassSingleton() {}
-
-    private static class Holder {
-        private static final StaticInnerClassSingleton INSTANCE = new StaticInnerClassSingleton();
-    }
-
-    public static StaticInnerClassSingleton getInstance() {
-        return Holder.INSTANCE;
-    }
-}
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.creational.singleton",
+            "Client" // 排除 Client 类，因为它只是演示类
+        );
     }
 
     public String getMermaidDiagram() {
@@ -75,12 +32,12 @@ public class StaticInnerClassSingleton {
 classDiagram
     class Singleton {
         -static Singleton instance
-        -Singleton()
+        -Singleton() private
         +static Singleton getInstance()
         +void doSomething()
     }
     class Client {
-        +void main()
+        +main()
     }
     Client --> Singleton : uses
     Singleton ..> Singleton : creates instance

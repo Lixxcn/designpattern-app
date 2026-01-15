@@ -1,5 +1,6 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -8,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("ObserverService 单元测试")
 class ObserverServiceTest {
 
-    private final ObserverService observerService = new ObserverService();
+    private final ObserverService observerService = new ObserverService(new CodeReaderUtil());
 
     @Test
     @DisplayName("应该成功执行观察者模式演示")

@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.memento.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MementoService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public MementoService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -35,65 +42,13 @@ public class MementoService {
         return output.toString();
     }
 
+    /**
+     * 从 memento 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 备忘录类
-class Memento {
-    private String state;
-
-    public Memento(String state) {
-        this.state = state;
-    }
-
-    public String getState() {
-        return state;
-    }
-}
-
-// 发起人类
-class Originator {
-    private String state;
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public Memento save() {
-        return new Memento(state);
-    }
-
-    public void restore(Memento memento) {
-        this.state = memento.getState();
-    }
-}
-
-// 管理者类
-class Caretaker {
-    private List<Memento> mementos = new ArrayList<>();
-
-    public void add(Memento memento) {
-        mementos.add(memento);
-    }
-
-    public Memento get(int index) {
-        return mementos.get(index);
-    }
-}
-
-// 使用示例
-Originator originator = new Originator();
-Caretaker caretaker = new Caretaker();
-
-originator.setState("状态1");
-caretaker.add(originator.save());
-
-originator.setState("状态2");
-originator.restore(caretaker.get(0));
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.memento"
+        );
     }
 
     public String getMermaidDiagram() {

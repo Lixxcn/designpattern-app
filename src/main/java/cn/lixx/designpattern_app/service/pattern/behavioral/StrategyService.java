@@ -1,10 +1,17 @@
 package cn.lixx.designpattern_app.service.pattern.behavioral;
 
 import cn.lixx.designpattern_app.service.pattern.behavioral.strategy.*;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StrategyService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public StrategyService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -32,53 +39,13 @@ public class StrategyService {
         return output.toString();
     }
 
+    /**
+     * 从 strategy 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 策略接口
-interface Strategy {
-    int execute(int a, int b);
-}
-
-// 具体策略 - 加法
-class AddStrategy implements Strategy {
-    @Override
-    public int execute(int a, int b) {
-        return a + b;
-    }
-}
-
-// 具体策略 - 减法
-class SubtractStrategy implements Strategy {
-    @Override
-    public int execute(int a, int b) {
-        return a - b;
-    }
-}
-
-// 上下文类
-class Context {
-    private Strategy strategy;
-
-    public Context(Strategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public void setStrategy(Strategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public int executeStrategy(int a, int b) {
-        return strategy.execute(a, b);
-    }
-}
-
-// 使用示例
-Context context = new Context(new AddStrategy());
-int result = context.executeStrategy(10, 5);  // 15
-
-context.setStrategy(new SubtractStrategy());
-result = context.executeStrategy(10, 5);  // 5
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.strategy"
+        );
     }
 
     public String getMermaidDiagram() {

@@ -3,10 +3,17 @@ package cn.lixx.designpattern_app.service.pattern.behavioral;
 import cn.lixx.designpattern_app.service.pattern.behavioral.iterator.Aggregate;
 import cn.lixx.designpattern_app.service.pattern.behavioral.iterator.Iterator;
 import cn.lixx.designpattern_app.service.pattern.behavioral.iterator.NameCollection;
+import cn.lixx.designpattern_app.util.CodeReaderUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class IteratorService {
+
+    private final CodeReaderUtil codeReaderUtil;
+
+    public IteratorService(CodeReaderUtil codeReaderUtil) {
+        this.codeReaderUtil = codeReaderUtil;
+    }
 
     public String executeExample() {
         StringBuilder output = new StringBuilder();
@@ -29,65 +36,13 @@ public class IteratorService {
         return output.toString();
     }
 
+    /**
+     * 从 iterator 包读取所有示例代码
+     */
     public String getCodeExample() {
-        return """
-// 迭代器接口
-interface Iterator {
-    boolean hasNext();
-    Object next();
-}
-
-// 聚合接口
-interface Aggregate {
-    Iterator createIterator();
-}
-
-// 具体聚合
-class NameCollection implements Aggregate {
-    private String[] names;
-
-    public NameCollection(String[] names) {
-        this.names = names;
-    }
-
-    @Override
-    public Iterator createIterator() {
-        return new NameIterator(names);
-    }
-}
-
-// 具体迭代器
-class NameIterator implements Iterator {
-    private String[] names;
-    private int position = 0;
-
-    public NameIterator(String[] names) {
-        this.names = names;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return position < names.length;
-    }
-
-    @Override
-    public Object next() {
-        if (this.hasNext()) {
-            return names[position++];
-        }
-        return null;
-    }
-}
-
-// 使用示例
-String[] names = {"张三", "李四", "王五"};
-Aggregate collection = new NameCollection(names);
-Iterator iterator = collection.createIterator();
-
-while (iterator.hasNext()) {
-    System.out.println(iterator.next());
-}
-""";
+        return codeReaderUtil.readCodeFromPackage(
+            "cn.lixx.designpattern_app.service.pattern.behavioral.iterator"
+        );
     }
 
     public String getMermaidDiagram() {
