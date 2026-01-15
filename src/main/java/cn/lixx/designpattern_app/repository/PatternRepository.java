@@ -271,6 +271,338 @@ classDiagram
 """
         );
         patterns.add(prototype);
+
+        // 初始化适配器模式数据
+        Pattern adapter = new Pattern(
+            "adapter",
+            "适配器模式",
+            "Adapter Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.BEGINNER,
+            "将一个类的接口转换成客户希望的另一个接口，使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。",
+            "将一个类的接口转换成客户希望的另一个接口，使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。",
+            "1. 想使用一个已经存在的类，而它的接口不符合你的需求\n2. 想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类协同工作\n3. 想使用几个现有的子类，但通过对每个子类进行子类化来调整它们的接口是不现实的",
+            "Target（目标）- 定义Client使用的与特定领域相关的接口\nAdapter（适配器）- 将Adaptee接口转换成Target接口\nAdaptee（被适配者）- 需要适配的现有接口\nClient（客户端）- 符合Target接口的对象协同工作",
+            "Adapter通过包装Adaptee对象，将Adaptee的接口转换成Target接口。",
+            "优点：\n1. 提高类的复用性\n2. 增加类的透明性\n3. 灵活性好\n\n缺点：\n1. 过多使用适配器会让系统非常零乱\n2. 仅限对象适配",
+            "相关模式：\n- 桥接模式与适配器模式相似\n- 装饰器模式与适配器模式相似",
+            "Spring的HandlerAdapter、MethodBeforeAdviceAdapter使用适配器模式。",
+            "1. Arrays.asList() - 数组转列表\n2. InputStreamReader - 字节流转字符流\n3. JDBC驱动适配器",
+            "1. 日志框架适配器\n2. 支付接口适配\n3. 第三方API集成",
+            """
+classDiagram
+    class Target {
+        <<interface>>
+        +request() void
+    }
+    class Adapter {
+        -Adaptee adaptee
+        +Adapter(Adaptee)
+        +request() void
+    }
+    class Adaptee {
+        +specificRequest() void
+    }
+    class Client {
+        +main()
+    }
+
+    Target <|.. Adapter
+    Adapter --> Adaptee : wraps
+    Client --> Target : uses
+"""
+        );
+        patterns.add(adapter);
+
+        // 初始化装饰器模式数据
+        Pattern decorator = new Pattern(
+            "decorator",
+            "装饰器模式",
+            "Decorator Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.INTERMEDIATE,
+            "动态地给一个对象添加一些额外的职责，就增加功能来说，装饰器模式比生成子类更为灵活。",
+            "动态地给一个对象添加一些额外的职责，就增加功能来说，装饰器模式比生成子类更为灵活。",
+            "1. 在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责\n2. 当不能采用继承的方式对系统进行扩展时",
+            "Component（组件）- 定义对象接口\nConcreteComponent（具体组件）- 定义具体对象\nDecorator（装饰器）- 维持Component引用\nConcreteDecorator（具体装饰器）- 具体装饰功能",
+            "Decorator继承Component并包含Component引用，ConcreteDecorator添加具体功能。",
+            "优点：\n1. 比继承更灵活\n2. 避免类层次爆炸\n3. 动态添加职责\n\n缺点：\n1. 产生更多小对象\n2. 装饰层次复杂",
+            "相关模式：\n- 适配器模式改变对象接口\n- 组合模式与装饰器模式相似\n- 装饰器模式不同于策略模式",
+            "Spring的HttpRequestDecorator、BufferedReader使用装饰器模式。",
+            "1. java.io包中的InputStream/OutputStream\n2. Collections.unmodifiableList()\n3. Collections.synchronizedList()",
+            "1. UI组件装饰\n2. 缓存装饰器\n3. 压缩/解压流",
+            """
+classDiagram
+    class Component {
+        <<interface>>
+        +operation() void
+    }
+    class ConcreteComponent {
+        +operation() void
+    }
+    class Decorator {
+        <<abstract>>
+        #Component component
+        +Decorator(Component)
+        +operation() void
+    }
+    class MilkDecorator {
+        +MilkDecorator(Component)
+        +operation() void
+    }
+    class SugarDecorator {
+        +SugarDecorator(Component)
+        +operation() void
+    }
+
+    Component <|.. ConcreteComponent
+    Component <|.. Decorator
+    Decorator <|-- MilkDecorator
+    Decorator <|-- SugarDecorator
+    Decorator o-- Component : decorates
+"""
+        );
+        patterns.add(decorator);
+
+        // 初始化代理模式数据
+        Pattern proxy = new Pattern(
+            "proxy",
+            "代理模式",
+            "Proxy Pattern",
+            PatternCategory.STRUCTURAL,
+            PatternDifficulty.INTERMEDIATE,
+            "为其他对象提供一种代理以控制对这个对象的访问。",
+            "为其他对象提供一种代理以控制对这个对象的访问。",
+            "1. 当需要为一个对象在不同地址空间提供局部代表时\n2. 当需要创建开销非常大的对象时\n3. 当需要控制对原始对象的访问时\n4. 当需要为多个对象提供统一访问接口时",
+            "Proxy（代理）- 持有RealSubject引用\nRealSubject（真实主题）- 定义真实对象\nSubject（主题）- 定义RealSubject和Proxy的公共接口",
+            "Proxy控制对RealSubject的访问，可以延迟初始化、权限控制、日志记录等。",
+            "优点：\n1. 职责清晰\n2. 高扩展性\n3. 智能化\n\n缺点：\n1. 请求处理速度变慢\n2. 实现复杂",
+            "相关模式：\n- 适配器模式改变对象接口\n- 装饰器模式添加行为\n- 代理模式控制访问",
+            "Spring的AOP代理、事务代理使用代理模式。",
+            "1. java.lang.reflect.Proxy - 动态代理\n2. RMI Stub/Skeleton - 远程代理\n3. java.rmi.Remote",
+            "1. 服务调用代理\n2. 缓存代理\n3. 权限控制代理",
+            """
+classDiagram
+    class Subject {
+        <<interface>>
+        +request() void
+    }
+    class RealSubject {
+        -String name
+        +RealSubject(String)
+        +request() void
+        -loadFromDatabase() void
+    }
+    class Proxy {
+        -RealSubject realSubject
+        -String name
+        +Proxy(String)
+        +request() void
+    }
+    class Client {
+        +main()
+    }
+
+    Subject <|.. RealSubject
+    Subject <|.. Proxy
+    Proxy o-- RealSubject : controls
+    Client --> Subject : uses
+"""
+        );
+        patterns.add(proxy);
+
+        // 初始化观察者模式数据
+        Pattern observer = new Pattern(
+            "observer",
+            "观察者模式",
+            "Observer Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.BEGINNER,
+            "定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。",
+            "定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。",
+            "1. 当一个抽象模型有两个方面，其中一个方面依赖于另一方面时\n2. 当对一个对象的改变需要同时改变其他对象，而不知道具体有多少对象有待改变时\n3. 当一个对象必须通知其他对象，而它又不能假定其他对象是谁时",
+            "Subject（主题）- 知道观察者，提供注册/删除接口\nObserver（观察者）- 定义更新接口\nConcreteSubject（具体主题）- 存储状态\nConcreteObserver（具体观察者）- 维护Subject引用",
+            "Subject维护观察者列表，状态改变时通知所有观察者。",
+            "优点：\n1. 符合开闭原则\n2. 广播通信\n3. 解耦\n\n缺点：\n1. 通知顺序不确定\n2. 可能导致性能问题",
+            "相关模式：\n- 中介者模式封装对象间的交互\n- 观察者模式用于广播通信",
+            "Spring的ApplicationEvent、ApplicationListener使用观察者模式。",
+            "1. java.util.Observer - 观察者接口\n2. PropertyChangeEvent - 属性变化事件\n3. Swing事件模型",
+            "1. 消息订阅系统\n2. DOM事件监听\n3. MVVM框架数据绑定",
+            """
+classDiagram
+    class Observer {
+        <<interface>>
+        +update(String) void
+    }
+    class ConcreteObserver {
+        -String name
+        +ConcreteObserver(String)
+        +update(String) void
+    }
+    class Subject {
+        <<abstract>>
+        #List~Observer~ observers
+        +attach(Observer)
+        +detach(Observer)
+        #notifyObservers(String)
+    }
+    class ConcreteSubject {
+        -String state
+        +setState(String)
+        +getState() String
+    }
+
+    Observer <|.. ConcreteObserver
+    Subject <|.. ConcreteSubject
+    Subject o-- Observer : notifies
+"""
+        );
+        patterns.add(observer);
+
+        // 初始化策略模式数据
+        Pattern strategy = new Pattern(
+            "strategy",
+            "策略模式",
+            "Strategy Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.BEGINNER,
+            "定义一系列算法，把它们一个个封装起来，并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。",
+            "定义一系列算法，把它们一个个封装起来，并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。",
+            "1. 许多相关的类仅仅是行为有不同时\n2. 需要使用一个算法的不同变体时\n3. 算法使用多个条件语句时\n4. 客户不需要知道算法的具体实现时",
+            "Strategy（策略）- 定义算法接口\nConcreteStrategy（具体策略）- 实现具体算法\nContext（上下文）- 使用Strategy",
+            "Context包含Strategy引用，可以在运行时切换具体策略。",
+            "优点：\n1. 算法可自由切换\n2. 避免多重条件\n3. 扩展性好\n\n缺点：\n1. 策略类增多\n2. 客户需知道策略",
+            "相关模式：\n- 状态模式与策略模式相似\n- 策略模式偏算法，状态模式偏状态",
+            "Spring的Resource、AuthenticationProvider使用策略模式。",
+            "1. Comparator - 比较策略\n2. ThreadPoolExecutor - 拒绝策略\n3. LayoutManager - 布局策略",
+            "1. 支付方式选择\n2. 排序算法选择\n3. 压缩算法选择",
+            """
+classDiagram
+    class Strategy {
+        <<interface>>
+        +execute(int, int) int
+    }
+    class AddStrategy {
+        +execute(int, int) int
+    }
+    class SubtractStrategy {
+        +execute(int, int) int
+    }
+    class MultiplyStrategy {
+        +execute(int, int) int
+    }
+    class Context {
+        -Strategy strategy
+        +Context(Strategy)
+        +setStrategy(Strategy)
+        +executeStrategy(int, int) int
+    }
+    class Client {
+        +main()
+    }
+
+    Strategy <|.. AddStrategy
+    Strategy <|.. SubtractStrategy
+    Strategy <|.. MultiplyStrategy
+    Context o-- Strategy : uses
+    Client --> Context : uses
+"""
+        );
+        patterns.add(strategy);
+
+        // 初始化责任链模式数据
+        Pattern chain = new Pattern(
+            "chain",
+            "责任链模式",
+            "Chain of Responsibility Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.INTERMEDIATE,
+            "为解除请求发送者和接收者之间的耦合，使多个对象都有机会处理请求。",
+            "为解除请求发送者和接收者之间的耦合，使多个对象都有机会处理请求。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。",
+            "1. 有多个对象可以处理请求，但不知道哪个对象处理时\n2. 想在不指定接收者的情况下向多个对象提交请求时\n3. 处理请求的对象集合需要动态指定时",
+            "Handler（处理者）- 定义处理请求接口\nConcreteHandler（具体处理者）- 处理它所负责的请求\nClient（客户端）- 向链提交请求",
+            "Client创建Handler链，请求沿链传递直到被处理。",
+            "优点：\n1. 降低耦合度\n2. 简化对象\n3. 增强灵活性\n\n缺点：\n1. 不能保证请求被处理\n2. 调试困难",
+            "相关模式：\n- 责任链模式与组合模式相似\n- 责任链模式常与组合模式结合使用",
+            "Spring的FilterChain、InterceptorChain使用责任链模式。",
+            "1. java.util.logging.Logger - 日志处理链\n2. Exception处理链\n3. Servlet过滤器链",
+            "1. 审批流程\n2. 异常处理链\n3. 请求过滤器",
+            """
+classDiagram
+    class Handler {
+        <<abstract>>
+        #Handler nextHandler
+        +setNext(Handler) Handler
+        +handleRequest(String)
+    }
+    class ConcreteHandlerA {
+        +handleRequest(String)
+    }
+    class ConcreteHandlerB {
+        +handleRequest(String)
+    }
+    class ConcreteHandlerC {
+        +handleRequest(String)
+    }
+    class Client {
+        +main()
+    }
+
+    Handler <|-- ConcreteHandlerA
+    Handler <|-- ConcreteHandlerB
+    Handler <|-- ConcreteHandlerC
+    Handler o-- Handler : next
+    Client --> Handler : uses
+"""
+        );
+        patterns.add(chain);
+
+        // 初始化模板方法模式数据
+        Pattern template = new Pattern(
+            "template",
+            "模板方法模式",
+            "Template Method Pattern",
+            PatternCategory.BEHAVIORAL,
+            PatternDifficulty.BEGINNER,
+            "定义一个操作中的算法骨架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。",
+            "定义一个操作中的算法骨架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。",
+            "1. 一次性实现一个算法的不变部分，并将可变的行为留给子类来实现\n2. 各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复\n3. 控制子类扩展时",
+            "AbstractClass（抽象类）- 定义抽象原语操作\nConcreteClass（具体类）- 实现原语操作",
+            "AbstractClass定义模板方法，ConcreteClass实现具体步骤。",
+            "优点：\n1. 代码复用\n2. 扩展性好\n3. 符合开闭原则\n\n缺点：\n1. 增加类数量\n2. 继承关系",
+            "相关模式：\n- 模板方法模式使用继承\n- 策略模式使用组合\n- 工厂方法是模板方法的一种特殊形式",
+            "Spring的JdbcTemplate、RestTemplate使用模板方法模式。",
+            "1. java.io.InputStream - read()模板方法\n2. AbstractList - addAll()\n3. AbstractList - get()抽象方法",
+            "1. 数据库访问模板\n2. 算法框架\n3. 业务流程模板",
+            """
+classDiagram
+    class AbstractClass {
+        <<abstract>>
+        +templateMethod() void
+        #primitiveOperation1() void
+        #primitiveOperation2() void
+        #primitiveOperation3() void
+    }
+    class ConcreteClassA {
+        +primitiveOperation1() void
+        +primitiveOperation2() void
+        +primitiveOperation3() void
+    }
+    class ConcreteClassB {
+        +primitiveOperation1() void
+        +primitiveOperation2() void
+        +primitiveOperation3() void
+    }
+    class Client {
+        +main()
+    }
+
+    AbstractClass <|-- ConcreteClassA
+    AbstractClass <|-- ConcreteClassB
+    Client --> AbstractClass : uses
+"""
+        );
+        patterns.add(template);
     }
 
     public List<Pattern> findAll() {
