@@ -1,11 +1,13 @@
 package cn.lixx.designpattern_app.model;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class Pattern {
     private String id;
@@ -24,4 +26,5 @@ public class Pattern {
     private String jdkExample;
     private String realWorldExample;
     private String mermaidDiagram;
+    private String codeExample;
 }

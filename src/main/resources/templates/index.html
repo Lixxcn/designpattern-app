@@ -32,7 +32,7 @@
                         <input type="radio" name="difficulty"
                                th:value="${difficulty}"
                                th:checked="${selectedDifficulty == difficulty}"
-                               th:onchange="'filterByDifficulty(\'' + ${difficulty} + '\')'">
+                               onchange="filterByDifficulty(this.value)">
                         <span th:text="${difficulty.displayName}"></span>
                     </label>
                 </th:block>
