@@ -38,7 +38,7 @@ header nav a {
 }
 
 header nav a:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .back-btn {
@@ -46,7 +46,7 @@ header nav a:hover {
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 4px;
     margin-bottom: 1rem;
 }
@@ -90,7 +90,7 @@ aside {
 
 .pattern-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .pattern-card h3 {
@@ -213,23 +213,25 @@ aside {
 }
 
 .code-file {
-    background: #f8f9fa;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
 }
 
 .code-file .file-name {
-    background: #34495e;
-    color: white;
+    background: #dbe6f0;
+    color: #000000;
+    border-bottom: 1px solid #e0e0e0;
     padding: 0.75rem 1rem;
     margin: 0;
     font-size: 0.95rem;
     font-family: monospace;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .code-file .code-block {
-    background: #1e1e1e;
+    background: #ffffff;
     padding: 0;
     margin: 0;
     border-radius: 0;
@@ -243,8 +245,8 @@ aside {
 }
 
 .code-block {
-    background: #2c3e50;
-    color: #ecf0f1;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
     padding: 1.5rem;
     border-radius: 8px;
     overflow-x: auto;
